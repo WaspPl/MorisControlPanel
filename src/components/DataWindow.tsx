@@ -1,4 +1,4 @@
-import {useState } from "react";
+import {useEffect, useState } from "react";
 import { useTable } from "../context/TableContext";
 import UsersData from "./DataComponents/UsersData";
 import UsersDetailsData from "./DataComponents/UsersDetailsData";
@@ -19,12 +19,15 @@ const Close = ({ size = 24, color = "currentColor" }) => (
 );
 
 function DataWindow({data}: Props) {
-    const { activeTable } = useTable();
+    const { activeTable, getItemDetailsById } = useTable();
     const [isExpanded, setIsExpanded] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
-    
-    const dataToDisplay = isExpanded ? { test: 'lol' } : data;
+    const [expandedData, setExpandedData] = useState(null);
+
+
+
+    const dataToDisplay = isExpanded ? expandedData : data;
     const TableRegistry: Record<string, { summary: any, details: any, edit: any }> = {
         Users: { summary: UsersData, details: UsersDetailsData, edit: UsersEditForm },
         Roles: { summary: UsersData, details: UsersDetailsData, edit: UsersEditForm },
@@ -47,6 +50,17 @@ function DataWindow({data}: Props) {
         setIsEditing(false);
     }
 
+    
+    useEffect(()=>{
+        if(isExpanded){
+            const getData = async () => {
+                let result = await getItemDetailsById(data.id)
+                setExpandedData(result)
+            } 
+            getData()
+        }
+    },[isExpanded])
+
     return (
         <div className="DataWindowHolder">
             <AnimatePresence>
@@ -67,7 +81,7 @@ function DataWindow({data}: Props) {
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className={`DataWindow ${isExpanded ? "BigDataWindow": ""} ${isAnimating ? 'Animating' : ''}`}>
                 <div className="DataWindowTopBar">
-                    {data.name}
+                    {data.id}
                     <div className="ButtonContainer">
                         <TopBarButton icon={isExpanded ? CopySharp : SquareSharp} text={isExpanded ? "Minimize" : "Details"} onClick={handleClickDetails}/>
                         <TopBarButton icon={Close} disabled/>

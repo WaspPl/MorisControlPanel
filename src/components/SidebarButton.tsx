@@ -4,14 +4,14 @@ type Props = {
     name: string;
     description: string;
     content: ComponentType<SVGProps<SVGSVGElement>>;
-    onClick: ( name: string) => void;
+    onClick: ( name: string) => Promise<void>;
     onHover: (name: string, description: string ) => void;
 }
 
 function SidebarButton({name, description, content: Icon, onClick, onHover}: Props) {
 
-    const handleClick =(): void => {
-        onClick(name)
+    const handleClick = async (): Promise<void> => {
+        await onClick(name)
     }
 
     const handleHover = (): void => {

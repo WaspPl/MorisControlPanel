@@ -6,13 +6,14 @@ import { useTable } from "../context/TableContext";
 
 function Sidebar() {
 
-    const {setActiveTable} = useTable()
+    const {setActiveTable, getItems} = useTable()
 
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
 
-    const handleButtonClick = (name: string): void => {
+    const handleButtonClick = async (name: string): Promise<void> => {
         setActiveTable(name as any);
+        await getItems(name as any)
     }
     const handleButtonHover = async (name: string, description: string): Promise<void> => {
 
