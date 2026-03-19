@@ -16,6 +16,7 @@ interface TableContextType {
     setActiveTable: (table: TableType) => void;
     items: any[];
     getItems: (table: TableType) => void;
+    setItems: ([]) => void;
     getItemDetailsById: (id: number) => Promise<any>;
 }
 
@@ -59,6 +60,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
         activeTable,
         setActiveTable,
         items,
+        setItems,
         getItems,
         getItemDetailsById
     }

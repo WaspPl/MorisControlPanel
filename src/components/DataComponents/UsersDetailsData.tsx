@@ -1,12 +1,15 @@
+type Props = {
+	data: any;
+	isEdited: boolean;
+};
 
-type Props = {data: JSON}
-
-function UsersDetailsData({data}: Props) {
-  return (
-    <div>
-        {JSON.stringify(data)}      
-    </div>
-  )
+function UsersDetailsData({ data, isEdited }: Props) {
+	return (
+		<div>
+			{isEdited && 'Editing'}
+			{JSON.stringify(data)}
+		</div>
+	);
 }
 
-export default UsersDetailsData
+export default UsersDetailsData;
