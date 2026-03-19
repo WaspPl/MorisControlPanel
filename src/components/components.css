@@ -1,230 +1,229 @@
-
-
-:root{
-    --TopBarHeight: 32px;
-    --IconHolderWidth: 100px;
-    --DescriptionHolderWidth: 200px;
+:root {
+	--TopBarHeight: 32px;
+	--IconHolderWidth: 100px;
+	--DescriptionHolderWidth: 200px;
 }
 
-*, *::before, *::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
 
 .BottomPart {
-  width: 100%;
-  height: calc(100% - var(--TopBarHeight));
-  display: flex;
-  flex-direction: row;
+	width: 100%;
+	height: calc(100% - var(--TopBarHeight));
+	display: flex;
+	flex-direction: row;
 }
-
 
 .Sidebar {
-    width: var(--IconHolderWidth);
-    height: calc(100% - var(--TopBarHeight));
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    transition: 0.3s ease;
-    display: flex;
-    overflow: hidden;
-    z-index: 100;
+	width: var(--IconHolderWidth);
+	height: calc(100% - var(--TopBarHeight));
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	transition: 0.3s ease;
+	display: flex;
+	overflow: hidden;
+	z-index: 100;
 }
 .Sidebar:has(.SidebarButtonWrapper:hover) {
-    width: calc(var(--IconHolderWidth) + var(--DescriptionHolderWidth));
+	width: calc(var(--IconHolderWidth) + var(--DescriptionHolderWidth));
 }
 
-.IconHolder{
-    background: beige;
-    z-index: 20;
-    min-width: var(--IconHolderWidth);
-    height: 100%;
-    display: flex;
-    align-items:end;
-    justify-content:space-evenly;
-    flex-shrink: 0;
-    flex-direction: column;
+.IconHolder {
+	background: beige;
+	z-index: 20;
+	min-width: var(--IconHolderWidth);
+	height: 100%;
+	display: flex;
+	align-items: end;
+	justify-content: space-evenly;
+	flex-shrink: 0;
+	flex-direction: column;
 }
 
 .SidebarButtonWrapper {
-    display: inline-block;
+	display: inline-block;
 }
-.SidebarButton{
-    position: relative;
-    right: 0;
-    width: 75px;
-    aspect-ratio: 1/1;
-    margin: 5px;
-    padding-left: 15px;
-    margin-right: 0px;
-    border-radius: 10px;
-    corner-shape: notch square square notch;
-    border: solid 4px;
-    border-right: 0px;
-    top: 0;
-    box-shadow: none;
-    transition: transform 0.2s, box-shadow 0.2s;
+.SidebarButton {
+	position: relative;
+	right: 0;
+	width: 75px;
+	aspect-ratio: 1/1;
+	margin: 5px;
+	padding-left: 15px;
+	margin-right: 0px;
+	border-radius: 10px;
+	corner-shape: notch square square notch;
+	border: solid 4px;
+	border-right: 0px;
+	top: 0;
+	box-shadow: none;
+	transition:
+		transform 0.2s,
+		box-shadow 0.2s;
 }
-.SidebarButtonWrapper:hover .SidebarButton{
-    transform: translateY(-8px);
-    box-shadow: white 0px 8px;
+.SidebarButtonWrapper:hover .SidebarButton {
+	transform: translateY(-8px);
+	box-shadow: white 0px 8px;
 }
-.DescriptionHolder{
-    z-index: 10;
-    width: var(--DescriptionHolderWidth);
-    height: 100%;
-    background: burlywood;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    white-space: pre-line;
-    position: absolute;
-    right: 0px;
-    box-sizing: border-box;
-    transition: color 0.1s ease-in-out;
+.DescriptionHolder {
+	z-index: 10;
+	width: var(--DescriptionHolderWidth);
+	height: 100%;
+	background: burlywood;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	white-space: pre-line;
+	position: absolute;
+	right: 0px;
+	box-sizing: border-box;
+	transition: color 0.1s ease-in-out;
 }
 
 .ContentHolder {
-    box-sizing: border-box;
-    margin-left: var(--IconHolderWidth);
-    height: 100%;
-    width: calc(100% - var(--IconHolderWidth));
-    background-color: #cff;
-    padding: 30px;
-
+	box-sizing: border-box;
+	margin-left: var(--IconHolderWidth);
+	height: 100%;
+	width: calc(100% - var(--IconHolderWidth));
+	background-color: #cff;
+	padding: 30px;
 }
 
-.DescriptionHolder h2, 
+.DescriptionHolder h2,
 .DescriptionHolder p {
-    text-align:justify;
+	text-align: justify;
 }
-p{
-    font-size: 12px;
+p {
+	font-size: 12px;
 }
 
-.ListWrapper{
-    background: #eff;
-    border-radius: 40px;
-    height: 100%;
-    overflow: hidden;
+.ListWrapper {
+	background: #eff;
+	border-radius: 40px;
+	height: 100%;
+	overflow: hidden;
 }
 .ListHolder {
-    box-sizing: border-box;
-    height: 100%;
-    width: 100%;
-    padding: 40px;
-    
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 20px;
-    justify-items: center;
-    overflow-x: visible;
-    overflow-y: overlay;
+	box-sizing: border-box;
+	height: 100%;
+	width: 100%;
+	padding: 40px;
+
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 20px;
+	justify-items: center;
+	overflow-x: visible;
+	overflow-y: overlay;
 }
 
 .DataWindowHolder {
-    width: 300px;
-    aspect-ratio: 1/1;
+	width: 300px;
+	aspect-ratio: 1/1;
 }
 .DataWindow {
-    width: 300px;
-    height: 300px;
-    background-color: aqua;
-    position: relative;
-    z-index: 5;
-    border: solid black 1px;
+	width: 300px;
+	height: 300px;
+	background-color: aqua;
+	position: relative;
+	z-index: 5;
+	border: solid black 1px;
 }
-.DataWindowTopBar{
-    background-color: skyblue;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.DataWindowTopBar {
+	background-color: skyblue;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
 .DataWindow.BigDataWindow {
-    position: fixed; 
-    top: 10%;
-    left: 10%;
-    width: 80vw;
-    height: 80vh;
-    aspect-ratio: auto; 
-    z-index: 200;
-    box-shadow: 0 0 50px rgba(0,0,0,0.4);
+	position: fixed;
+	top: 10%;
+	left: 10%;
+	width: 80vw;
+	height: 80vh;
+	aspect-ratio: auto;
+	z-index: 200;
+	box-shadow: 0 0 50px rgba(0, 0, 0, 0.4);
 }
 
-.Animating{
-    z-index: 9;
+.Animating {
+	z-index: 9;
 }
 
-.BackgroundBlur{
-    position: fixed;
-    height: 100vh;
-    width: 100vw;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    z-index: 100;
-    background-color: rgba(0,0,0,0.5);
-    backdrop-filter: blur(2px);
+.BackgroundBlur {
+	position: fixed;
+	height: 100vh;
+	width: 100vw;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 100;
+	background-color: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(2px);
 }
 
 .TitleBar {
-    height: var(--TopBarHeight);
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+	height: var(--TopBarHeight);
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 }
-.TopBarButton{
-    height: 30px;
-    max-width: 30px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    margin: 0px;
-    padding: 2px;
-    overflow: hidden;
-    transition: all 0.3s ease-in-out;
-    white-space: nowrap;
+.TopBarButton {
+	height: 30px;
+	max-width: 30px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	margin: 0px;
+	padding: 2px;
+	overflow: hidden;
+	transition: all 0.3s ease-in-out;
+	white-space: nowrap;
 }
-.TopBarButton.enabled:has(> button:hover){
-    max-width: 1000px;
+.TopBarButton.enabled:has(> button:hover) {
+	max-width: 1000px;
 }
-.TopBarButton>button{
-    height: 30px;
-    padding: 1px;
-    aspect-ratio: 1/1;
-    background-color: transparent;
-    border: 0;
-    transition: all 0.3s;
+.TopBarButton > button {
+	height: 30px;
+	padding: 1px;
+	aspect-ratio: 1/1;
+	background-color: transparent;
+	border: 0;
+	transition: all 0.3s;
 }
-.TopBarButton.enabled>button:hover{
-    transform: translateY(-2px);
+.TopBarButton.enabled > button:hover {
+	transform: translateY(-2px);
 }
 .ButtonContainer {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
-.LogoContainer{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.LogoContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 .Logo {
-    height: 30px;
-    padding: 2px;
-    width: var(--IconHolderWidth);
-    display: flex;
-    flex-direction: row;
-    justify-content:center;
-    margin-right: 10px;
+	height: 30px;
+	padding: 2px;
+	width: var(--IconHolderWidth);
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-right: 10px;
 }
-.Logo>img {
-    object-fit: scale-down;
-    border: solid black 1px;
-    aspect-ratio: 1/1;
-    height: 100%;
-
-    }
+.Logo > img {
+	object-fit: scale-down;
+	border: solid black 1px;
+	aspect-ratio: 1/1;
+	height: 100%;
+}

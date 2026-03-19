@@ -1,13 +1,9 @@
 type Props = {
-    data: JSON;
+	data: JSON;
+};
+
+function UsersData({ data }: Props) {
+	return <div>{JSON.stringify(data)}</div>;
 }
 
-function UsersData({data}: Props) {
-  return (
-    <div>
-        {JSON.stringify(data)}
-    </div>
-  )
-}
-
-export default UsersData
+export default UsersData;
