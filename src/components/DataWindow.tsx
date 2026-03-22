@@ -5,6 +5,7 @@ import UsersDetailsData from './DataComponents/UsersDetailsData';
 import TopBarButton from './TopBarButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SquareSharp, CopySharp } from 'pixelarticons/react';
+import UniversalData from './DataComponents/UniverstalData';
 
 type Props = {
 	data: any;
@@ -20,47 +21,49 @@ const Close = ({ size = 24, color = 'currentColor' }) => (
 );
 
 function DataWindow({ data }: Props) {
-	const { activeTable, getItemDetailsById } = useTable();
-	const [isExpanded, setIsExpanded] = useState(false);
-	const [isEditing, setIsEditing] = useState(false);
+	const {
+		activeTable,
+		getItemDetailsById,
+		expandedWindowId,
+		setExpandedWindowId,
+	} = useTable();
 	const [isAnimating, setIsAnimating] = useState(false);
 	const [expandedData, setExpandedData] = useState(null);
 
-	const dataToDisplay = isExpanded ? expandedData : data;
+	const dataToDisplay = expandedWindowId == data.id ? expandedData : data;
 	const TableRegistry: Record<string, { summary: any; details: any }> = {
 		Users: { summary: UsersData, details: UsersDetailsData },
-		Roles: { summary: UsersData, details: UsersDetailsData },
-		Commands: { summary: UsersData, details: UsersDetailsData },
-		Sprites: { summary: UsersData, details: UsersDetailsData },
+		Roles: { summary: UniversalData, details: UniversalData },
+		Commands: { summary: UniversalData, details: UniversalData },
+		Sprites: { summary: UniversalData, details: UniversalData },
 	};
 
 	const Config = TableRegistry[activeTable] || TableRegistry['Users'];
 
-	const CurrentView = isExpanded ? Config.details : Config.summary;
+	const CurrentView =
+		expandedWindowId == data.id ? Config.details : Config.summary;
 
 	const handleClickDetails = () => {
-		setIsExpanded(!isExpanded);
-		setIsEditing(false);
+		setExpandedWindowId(expandedWindowId == data.id ? null : data.id);
 	};
 	const closeDetals = () => {
-		setIsExpanded(false);
-		setIsEditing(false);
+		setExpandedWindowId(null);
 	};
 
 	useEffect(() => {
-		if (isExpanded) {
+		if (expandedWindowId == data.id) {
 			const getData = async () => {
-				let result = await getItemDetailsById(data.id);
+				let result = await getItemDetailsById(activeTable, data.id);
 				setExpandedData(result);
 			};
 			getData();
 		}
-	}, [isExpanded]);
+	}, [expandedWindowId]);
 
 	return (
 		<div className='DataWindowHolder'>
 			<AnimatePresence>
-				{isExpanded && (
+				{expandedWindowId == data.id && (
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
@@ -79,20 +82,20 @@ function DataWindow({ data }: Props) {
 				}}
 				layout
 				transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-				className={`DataWindow ${isExpanded ? 'BigDataWindow' : ''} ${isAnimating ? 'Animating' : ''}`}
+				className={`DataWindow ${expandedWindowId == data.id ? 'BigDataWindow' : ''} ${isAnimating ? 'Animating' : ''}`}
 			>
 				<div className='DataWindowTopBar'>
 					{data.id}
 					<div className='ButtonContainer'>
 						<TopBarButton
-							icon={isExpanded ? CopySharp : SquareSharp}
-							text={isExpanded ? 'Minimize' : 'Details'}
+							icon={expandedWindowId == data.id ? CopySharp : SquareSharp}
+							text={expandedWindowId == data.id ? 'Minimize' : 'Details'}
 							onClick={handleClickDetails}
 						/>
 						<TopBarButton icon={Close} disabled />
 					</div>
 				</div>
-				<CurrentView data={dataToDisplay} isEdited={isEditing} />
+				<CurrentView data={dataToDisplay} />
 			</motion.div>
 		</div>
 	);

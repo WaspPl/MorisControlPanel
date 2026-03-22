@@ -10,14 +10,13 @@ import {
 import { useTable } from '../context/TableContext';
 
 function Sidebar() {
-	const { setActiveTable, getItems } = useTable();
+	const { setActiveTable } = useTable();
 
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 
 	const handleButtonClick = async (name: string): Promise<void> => {
 		setActiveTable(name as any);
-		await getItems(name as any);
 	};
 	const handleButtonHover = async (
 		name: string,

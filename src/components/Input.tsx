@@ -1,13 +1,15 @@
 type Props = {
+	name: string;
 	type: string;
 	value: any;
-	setValue: (value: any) => null;
+	setValue?: (value: any) => void;
 	isEditing: boolean;
 	placeholder?: string;
 	label?: string;
 };
 
 function Input({
+	name,
 	type,
 	value,
 	setValue,
@@ -16,13 +18,17 @@ function Input({
 	label,
 }: Props) {
 	const handleChange = (event: any) => {
-		setValue(event.targer.value);
+		if (setValue) {
+			setValue(event.target.value);
+		}
 	};
 
 	return (
 		<div className='Input'>
-			{label && <p>{label}</p>}
+			{label && <label htmlFor={name}>{label}</label>}
 			<input
+				name={name}
+				id={name}
 				type={type}
 				value={value}
 				onChange={handleChange}
