@@ -133,6 +133,7 @@ p {
 	position: relative;
 	z-index: 5;
 	border: solid black 1px;
+	overflow: hidden;
 }
 .DataWindowTopBar {
 	background-color: skyblue;

@@ -17,13 +17,6 @@ function UsersData({ data }: Props) {
 	return (
 		<form>
 			<Input
-				name='Id'
-				type='number'
-				value={data?.id}
-				isEditing={false}
-				label='Id'
-			/>
-			<Input
 				name='Username'
 				type='text'
 				value={data?.username}

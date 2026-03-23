@@ -1,31 +1,22 @@
 import { useEffect, useState } from 'react';
 import Input from '../Input';
-import Dropdown from '../Dropdown';
 import { useTable } from '../../context/TableContext';
 import DetailsButtons from './DetailsButtons';
 
 type Props = {
 	data: {
 		id: number;
-		username: string;
-		role_id: number;
-		llm_prefix: string | null;
+		name: string;
 	};
 	reloadFunction: () => void;
 };
 
-function UsersDetailsData({ data, reloadFunction }: Props) {
+function RolesDetailsData({ data, reloadFunction }: Props) {
 	//#region States
-	const [username, setUsername] = useState<string>(data?.username || '');
-	const [roleId, setRoleId] = useState<number>(data?.role_id || 0);
-	const [llmPrefix, setLlmPrefix] = useState<string | null>(
-		data?.llm_prefix || '',
-	);
-	const [roles, setRoles] = useState<any[]>([]);
-
+	const [name, setName] = useState<string>(data?.name || '');
 	const [isEditing, setIsEditing] = useState(false);
 
-	const { items, getItems, updateItemById, setItems, activeTable } = useTable();
+	const { items, updateItemById, setItems, activeTable } = useTable();
 
 	//#endregion
 
@@ -45,20 +36,9 @@ function UsersDetailsData({ data, reloadFunction }: Props) {
 	// #region useEffects
 	useEffect(() => {
 		if (data) {
-			setUsername(data.username || '');
-			setRoleId(data.role_id || 0);
-			setLlmPrefix(data.llm_prefix || '');
+			setName(data.name || '');
 		}
 	}, [data]);
-
-	useEffect(() => {
-		const fetchRoles = async () => {
-			const result = await getItems('Roles');
-			setRoles(result);
-		};
-
-		fetchRoles();
-	}, []);
 
 	// #endregion
 	if (!data) return null;
@@ -72,28 +52,12 @@ function UsersDetailsData({ data, reloadFunction }: Props) {
 				label='Id'
 			/>
 			<Input
-				name='username'
+				name='name'
 				type='text'
-				value={username}
-				setValue={setUsername}
+				value={name}
+				setValue={setName}
 				isEditing={isEditing}
-				label='Username'
-			/>
-			<Dropdown
-				name='role_id'
-				value={roleId}
-				setValue={setRoleId}
-				isEditing={isEditing}
-				choices={roles}
-				label='Role'
-			/>
-			<Input
-				name='llm_prefix'
-				type='text'
-				value={llmPrefix}
-				setValue={setLlmPrefix}
-				isEditing={isEditing}
-				label='LLM Prefix'
+				label='Name'
 			/>
 			<DetailsButtons
 				isEditing={isEditing}
@@ -105,4 +69,4 @@ function UsersDetailsData({ data, reloadFunction }: Props) {
 	);
 }
 
-export default UsersDetailsData;
+export default RolesDetailsData;

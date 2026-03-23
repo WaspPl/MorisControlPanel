@@ -6,6 +6,8 @@ import TopBarButton from './TopBarButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SquareSharp, CopySharp } from 'pixelarticons/react';
 import UniversalData from './DataComponents/UniverstalData';
+import RolesData from './DataComponents/RolesData';
+import RolesDetailsData from './DataComponents/RolesDetailsData';
 
 type Props = {
 	data: any;
@@ -29,36 +31,41 @@ function DataWindow({ data }: Props) {
 	} = useTable();
 	const [isAnimating, setIsAnimating] = useState(false);
 	const [expandedData, setExpandedData] = useState(null);
+	const [reloadBool, setReloadBool] = useState(false);
+	const toggleReload = () => {
+		setReloadBool(!reloadBool);
+	};
 
-	const dataToDisplay = expandedWindowId == data.id ? expandedData : data;
+	const isExpanded: boolean = expandedWindowId == data.id;
+
+	const dataToDisplay = isExpanded ? expandedData : data;
 	const TableRegistry: Record<string, { summary: any; details: any }> = {
 		Users: { summary: UsersData, details: UsersDetailsData },
-		Roles: { summary: UniversalData, details: UniversalData },
+		Roles: { summary: RolesData, details: RolesDetailsData },
 		Commands: { summary: UniversalData, details: UniversalData },
 		Sprites: { summary: UniversalData, details: UniversalData },
 	};
 
 	const Config = TableRegistry[activeTable] || TableRegistry['Users'];
 
-	const CurrentView =
-		expandedWindowId == data.id ? Config.details : Config.summary;
+	const CurrentView = isExpanded ? Config.details : Config.summary;
 
 	const handleClickDetails = () => {
-		setExpandedWindowId(expandedWindowId == data.id ? null : data.id);
+		setExpandedWindowId(isExpanded ? null : data.id);
 	};
 	const closeDetals = () => {
 		setExpandedWindowId(null);
 	};
 
 	useEffect(() => {
-		if (expandedWindowId == data.id) {
+		if (isExpanded) {
 			const getData = async () => {
 				let result = await getItemDetailsById(activeTable, data.id);
 				setExpandedData(result);
 			};
 			getData();
 		}
-	}, [expandedWindowId]);
+	}, [expandedWindowId, reloadBool]);
 
 	return (
 		<div className='DataWindowHolder'>
@@ -82,7 +89,7 @@ function DataWindow({ data }: Props) {
 				}}
 				layout
 				transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-				className={`DataWindow ${expandedWindowId == data.id ? 'BigDataWindow' : ''} ${isAnimating ? 'Animating' : ''}`}
+				className={`DataWindow ${isExpanded ? 'BigDataWindow' : ''} ${isAnimating ? 'Animating' : ''}`}
 			>
 				<div className='DataWindowTopBar'>
 					{data.id}
@@ -95,7 +102,7 @@ function DataWindow({ data }: Props) {
 						<TopBarButton icon={Close} disabled />
 					</div>
 				</div>
-				<CurrentView data={dataToDisplay} />
+				<CurrentView data={dataToDisplay} reloadFunction={toggleReload} />
 			</motion.div>
 		</div>
 	);
