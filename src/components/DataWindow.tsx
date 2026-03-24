@@ -38,6 +38,7 @@ function DataWindow({ data, table }: Props) {
 		if (isExpanded && !expandedData) {
 			const getData = async () => {
 				const result = await getItemDetailsById(table, data.id);
+				console.log(result);
 				setExpandedData(result);
 				setDraft(result);
 			};

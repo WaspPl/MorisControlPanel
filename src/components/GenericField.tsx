@@ -5,6 +5,7 @@ import ForeignField from './Fields/ForeignField';
 import ImageField from './Fields/ImageField';
 import Input from './Fields/Input';
 import ListField from './Fields/ListField';
+import PromptList from './Fields/PromptList';
 
 interface Props {
 	fieldConfig: FieldConfig;
@@ -74,9 +75,17 @@ function GenericField({
 				/>
 			);
 		case 'dropdownList':
+			return (
+				<ListField
+					label={label}
+					items={value || []}
+					isEditing={isEditing}
+					type={type}
+					onChange={(newValue) => onChange(name, newValue, apiKey)}
+				/>
+			);
 		case 'inputList':
-			return <ListField label={label} items={value} isEditing={isEditing} />;
-
+			return <PromptList promptList={value} />;
 		case 'image':
 			return (
 				<ImageField

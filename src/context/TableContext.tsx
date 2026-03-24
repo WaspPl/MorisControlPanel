@@ -23,6 +23,13 @@ interface TableContextType {
 	expandedWindowId: number | null;
 	setExpandedWindowId: (id: number | null) => void;
 	sleep: (ms: number) => Promise<any>;
+	createRoleAssignment: (data: any) => Promise<any>;
+	deleteRoleAssignmentById: (id: number) => Promise<any>;
+	createPrompt: (data: {
+		text: string;
+		commandId: number | null;
+	}) => Promise<any>;
+	deletePromptById: (id: number) => Promise<any>;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
@@ -106,6 +113,61 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			console.error(error);
 		}
 	};
+
+	const createRoleAssignment = async (data: {
+		commandId: number;
+		roleId: number;
+	}) => {
+		try {
+			const response = await axios.post(
+				`${API_BASE}/role_assignments`,
+				data,
+				getAuthHeaders(),
+			);
+			return response.data;
+		} catch (error) {
+			// showErrorNotification("Failed to create assignment");
+			console.error(error);
+		}
+	};
+	const deleteRoleAssignmentById = async (id: number) => {
+		try {
+			const response = await axios.delete(
+				`${API_BASE}/role_assignments/${id}`,
+				getAuthHeaders(),
+			);
+			return response.data;
+		} catch (error) {
+			// showErrorNotification("Failed to delete an assignment");
+			console.error(error);
+		}
+	};
+	const createPrompt = async (data: {
+		text: string;
+		commandId: number | null;
+	}) => {
+		try {
+			const response = await axios.post(
+				`${API_BASE}/prompts`,
+				data,
+				getAuthHeaders(),
+			);
+			return response.data;
+		} catch (error) {
+			// showErrorNotification("Failed to create prompt");
+			console.error(error);
+		}
+	};
+	const deletePromptById = async (id: number) => {
+		try {
+			await axios.delete(`${API_BASE}/prompts/${id}`, getAuthHeaders());
+			return;
+		} catch (error) {
+			// showErrorNotification("Failed to delete prompt");
+			console.error(error);
+		}
+	};
+
 	const valuesToExport = {
 		activeTable,
 		setActiveTable,
@@ -119,6 +181,10 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		expandedWindowId,
 		setExpandedWindowId,
 		sleep,
+		createRoleAssignment,
+		deleteRoleAssignmentById,
+		createPrompt,
+		deletePromptById,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>

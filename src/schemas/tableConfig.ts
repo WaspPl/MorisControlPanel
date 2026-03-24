@@ -109,7 +109,7 @@ export const Table_Schemas: Record<TableType, TableSchema> = {
 				name: 'prompts',
 				label: 'Assigned Prompts',
 				type: 'inputList',
-				apiKey: 'assignments',
+				apiKey: 'prompts',
 			},
 		],
 	},
