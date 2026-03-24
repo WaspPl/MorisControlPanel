@@ -3,7 +3,7 @@ type Variant = 'Success' | 'Failure' | 'Warning' | 'Primary' | 'Secondary';
 type ButtonType = 'submit' | 'reset' | 'button' | undefined;
 
 type Props = {
-	label: string;
+	label: any;
 	onClick?: (event: any) => void;
 	variant?: Variant;
 	type?: ButtonType;

@@ -1,108 +1,157 @@
 import { useEffect, useState } from 'react';
-import { useTable } from '../context/TableContext';
-import UsersData from './DataComponents/UsersData';
-import UsersDetailsData from './DataComponents/UsersDetailsData';
-import TopBarButton from './TopBarButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SquareSharp, CopySharp } from 'pixelarticons/react';
-import UniversalData from './DataComponents/UniverstalData';
-import RolesData from './DataComponents/RolesData';
-import RolesDetailsData from './DataComponents/RolesDetailsData';
+import { useTable, type TableType } from '../context/TableContext';
+import { Table_Schemas } from '../schemas/tableConfig';
+import GenericField from './GenericField';
+import TopBarButton from './TopBarButton';
+import DetailsButtons from './DetailsButtons';
+import BackgroundBlur from './BackgroundBlur';
 
 type Props = {
 	data: any;
+	table: TableType;
 };
 
-const Close = ({ size = 24, color = 'currentColor' }) => (
-	<svg width={size} height={size} viewBox='0 0 24 24' fill='none'>
-		<path
-			d='M5 5h2v2H5V5Zm4 4H7V7h2v2Zm2 2H9V9h2v2Zm2 0h-2v2H9v2H7v2H5v2h2v-2h2v-2h2v-2h2v2h2v2h2v2h2v-2h-2v-2h-2v-2h-2v-2Zm2-2v2h-2V9h2Zm2-2v2h-2V7h2Zm0 0V5h2v2h-2Z'
-			fill={color}
-		/>
-	</svg>
-);
-
-function DataWindow({ data }: Props) {
+function DataWindow({ data, table }: Props) {
 	const {
-		activeTable,
 		getItemDetailsById,
+		updateItemById,
 		expandedWindowId,
 		setExpandedWindowId,
+		deleteItemById,
+		setItems,
+		items,
 	} = useTable();
+
+	// States
+	const [isEditing, setIsEditing] = useState(false);
 	const [isAnimating, setIsAnimating] = useState(false);
-	const [expandedData, setExpandedData] = useState(null);
-	const [reloadBool, setReloadBool] = useState(false);
-	const toggleReload = () => {
-		setReloadBool(!reloadBool);
-	};
+	const [expandedData, setExpandedData] = useState<any>(null);
+	const [draft, setDraft] = useState<any>(null);
 
-	const isExpanded: boolean = expandedWindowId == data.id;
+	const isExpanded = expandedWindowId === data.id;
+	const schema = Table_Schemas[table];
 
-	const dataToDisplay = isExpanded ? expandedData : data;
-	const TableRegistry: Record<string, { summary: any; details: any }> = {
-		Users: { summary: UsersData, details: UsersDetailsData },
-		Roles: { summary: RolesData, details: RolesDetailsData },
-		Commands: { summary: UniversalData, details: UniversalData },
-		Sprites: { summary: UniversalData, details: UniversalData },
-	};
-
-	const Config = TableRegistry[activeTable] || TableRegistry['Users'];
-
-	const CurrentView = isExpanded ? Config.details : Config.summary;
-
-	const handleClickDetails = () => {
-		setExpandedWindowId(isExpanded ? null : data.id);
-	};
-	const closeDetals = () => {
-		setExpandedWindowId(null);
-	};
-
+	// Fetch data
 	useEffect(() => {
-		if (isExpanded) {
+		if (isExpanded && !expandedData) {
 			const getData = async () => {
-				let result = await getItemDetailsById(activeTable, data.id);
+				const result = await getItemDetailsById(table, data.id);
 				setExpandedData(result);
+				setDraft(result);
 			};
 			getData();
+		} else {
+			setDraft(null);
 		}
-	}, [expandedWindowId, reloadBool]);
+		if (!isExpanded) setExpandedData(null);
+	}, [isExpanded, data.id, table, getItemDetailsById]);
+
+	// Handlers
+	const handleFieldChange = (_name: string, newValue: any, apiKey: string) => {
+		setDraft((prev: any) => {
+			const updated = { ...prev };
+			updated[apiKey] = newValue;
+			return updated;
+		});
+	};
+	const handleMinimize = () => {
+		setIsEditing(false);
+		setExpandedWindowId(null);
+	};
+	const handleSave = async (e: any) => {
+		e.preventDefault();
+		console.log(draft);
+		const success = await updateItemById(table, data.id, draft);
+		if (success) {
+			setExpandedData(draft);
+			setIsEditing(false);
+			setItems(
+				items.map((item) => {
+					if (item.id == success.id) return success;
+					return item;
+				}),
+			);
+		}
+	};
+	const handleCancel = (e: any) => {
+		e.preventDefault();
+		setDraft(expandedData);
+		setIsEditing(false);
+	};
+	const handleDelete = async (e: any) => {
+		e.preventDefault();
+		const response = await deleteItemById(table, data.id);
+		if (response) {
+			setExpandedWindowId(null);
+			setItems(items.filter((item) => item.id != data.id));
+		}
+	};
+
+	const currentData = isExpanded ? draft || expandedData || data : data;
 
 	return (
 		<div className='DataWindowHolder'>
-			<AnimatePresence>
-				{expandedWindowId == data.id && (
-					<motion.div
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						className='BackgroundBlur'
-						onClick={closeDetals}
-					/>
-				)}
-			</AnimatePresence>
+			{isExpanded && <BackgroundBlur onClick={handleMinimize} />}
 			<motion.div
-				onLayoutAnimationStart={() => {
-					setIsAnimating(true);
-				}}
-				onLayoutAnimationComplete={() => {
-					setIsAnimating(false);
-				}}
 				layout
+				onLayoutAnimationStart={() => setIsAnimating(true)}
+				onLayoutAnimationComplete={() => setIsAnimating(false)}
 				transition={{ type: 'spring', stiffness: 300, damping: 25 }}
 				className={`DataWindow ${isExpanded ? 'BigDataWindow' : ''} ${isAnimating ? 'Animating' : ''}`}
 			>
 				<div className='DataWindowTopBar'>
-					{data.id}
+					<span className='IdBadge'>#{data.id}</span>
 					<div className='ButtonContainer'>
 						<TopBarButton
-							icon={expandedWindowId == data.id ? CopySharp : SquareSharp}
-							text={expandedWindowId == data.id ? 'Minimize' : 'Details'}
-							onClick={handleClickDetails}
+							icon={isExpanded ? CopySharp : SquareSharp}
+							text={isExpanded ? 'Minimize' : 'Details'}
+							onClick={
+								isExpanded ? handleMinimize : () => setExpandedWindowId(data.id)
+							}
 						/>
-						<TopBarButton icon={Close} disabled />
 					</div>
 				</div>
-				<CurrentView data={dataToDisplay} reloadFunction={toggleReload} />
+
+				<form onSubmit={handleSave}>
+					<div className='FormWrapper'>
+						{schema.fields.map((field) => {
+							if (!isExpanded && !schema.summary.includes(field.name))
+								return null;
+							const valueKey = currentData[field.apiKey]
+								? field.apiKey
+								: field.name;
+							return (
+								<GenericField
+									key={field.name}
+									fieldConfig={field}
+									value={currentData[valueKey]}
+									isEditing={isEditing}
+									onChange={handleFieldChange}
+									isExpanded={isExpanded}
+								/>
+							);
+						})}
+					</div>
+
+					<AnimatePresence>
+						{isExpanded && (
+							<motion.div
+								initial={{ opacity: 0, y: 10 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0 }}
+							>
+								<DetailsButtons
+									isEditing={isEditing}
+									setIsEditing={setIsEditing}
+									onCancel={handleCancel}
+									onDelete={handleDelete}
+								/>
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</form>
 			</motion.div>
 		</div>
 	);

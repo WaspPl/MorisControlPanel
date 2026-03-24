@@ -1,7 +1,7 @@
-import { useTable, type TableType } from '../context/TableContext';
+import { useTable, type TableType } from '../../context/TableContext';
 type Props = {
 	name: string;
-	item: { id: number; name: string };
+	item?: { id: number; name: string };
 	foreignItemTable: TableType;
 	label?: string;
 };
@@ -9,7 +9,8 @@ type Props = {
 function ForeignField({ name, item, foreignItemTable, label }: Props) {
 	const { setActiveTable, setExpandedWindowId, sleep } = useTable();
 
-	const handleClick = async () => {
+	const handleClick = async (event: any) => {
+		event.preventDefault();
 		if (item?.id) {
 			setActiveTable(foreignItemTable);
 			await sleep(300);
@@ -20,7 +21,7 @@ function ForeignField({ name, item, foreignItemTable, label }: Props) {
 		<div className='Input'>
 			{label && <label htmlFor={name}>{label}</label>}
 			<button id={name} onClick={handleClick}>
-				{item?.name}
+				{item ? item?.name : 'Not Assigned'}
 			</button>
 		</div>
 	);

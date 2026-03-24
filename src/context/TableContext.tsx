@@ -98,7 +98,9 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				`${API_BASE}/${Routes[table]}/${id}`,
 				getAuthHeaders(),
 			);
-			return response.data;
+			if (response.status == 204) {
+				return 'success';
+			}
 		} catch (error) {
 			// showErrorNotification("Failed to delete item");
 			console.error(error);
