@@ -8,9 +8,11 @@ import {
 } from 'pixelarticons/react';
 
 import { useTable } from '../context/TableContext';
+import { useAuth } from '../features/auth/AuthContext';
 
 function Sidebar() {
 	const { setActiveTable } = useTable();
+	const { isAdmin } = useAuth();
 
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -50,6 +52,7 @@ function Sidebar() {
 					onClick={handleButtonClick}
 					onHover={handleButtonHover}
 				/>
+
 				<SidebarButton
 					content={ImagesSharp}
 					name='Sprites'

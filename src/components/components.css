@@ -153,6 +153,35 @@ p {
 	box-shadow: 0 0 50px rgba(0, 0, 0, 0.4);
 }
 
+/* Allow expanded window content to scroll (prevents overflow from long editors). */
+.DataWindow.BigDataWindow {
+	display: flex;
+	flex-direction: column;
+}
+
+.DataWindowTopBar {
+	flex-shrink: 0;
+}
+
+.DataWindow.BigDataWindow > form {
+	flex: 1;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
+.DataWindow.BigDataWindow .FormWrapper {
+	flex: 1;
+	min-height: 0; /* needed for flex children to shrink before buttons */
+	overflow-y: auto;
+	padding-right: 6px; /* space for scrollbar */
+}
+
+.DataWindow.BigDataWindow .ButtonHolder {
+	flex-shrink: 0;
+}
+
 .Animating {
 	z-index: 9;
 }
@@ -228,3 +257,207 @@ p {
 	aspect-ratio: 1/1;
 	height: 100%;
 }
+
+/* ----- Shared form controls ----- */
+.FormWrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.Input {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+
+.Input label {
+	font-size: 11px;
+	opacity: 0.9;
+}
+
+.Input input,
+.Dropdown select {
+	width: 100%;
+	padding: 8px 10px;
+	border-radius: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	background: rgba(255, 255, 255, 0.7);
+	font-family: inherit;
+}
+
+.Input input:disabled,
+.Dropdown select:disabled {
+	opacity: 0.65;
+}
+
+.ButtonHolder {
+	display: flex;
+	gap: 10px;
+	justify-content: flex-end;
+	padding: 10px 0 0;
+}
+
+.IdBadge {
+	font-weight: 700;
+	padding: 4px 8px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+/* ----- Commands editor two-column layout ----- */
+.CommandsEditor {
+	display: grid;
+	grid-template-columns: 1fr 0.9fr;
+	gap: 16px;
+	width: 100%;
+}
+
+.CommandsEditorLeft {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	min-width: 0;
+}
+
+.CommandsEditorRight {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	min-width: 0;
+}
+
+.CommandsEditorPanel {
+	background: rgba(255, 255, 255, 0.25);
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 14px;
+	padding: 10px;
+	min-width: 0;
+}
+
+.CommandsEditorPanel h3 {
+	margin: 0 0 8px;
+	font-size: 12px;
+	opacity: 0.95;
+}
+
+/* ----- Prompt / Role lists ----- */
+.PromptList .List,
+.RoleList .List {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.Pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.35);
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	max-width: 100%;
+}
+
+.Pill button {
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	padding: 0;
+	font-family: inherit;
+}
+
+.PromptList > div:first-child {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.RoleList > div:first-child {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 10px;
+}
+
+.PromptList button,
+.RoleList button {
+	padding: 8px 12px;
+	border-radius: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	background: rgba(255, 255, 255, 0.6);
+	cursor: pointer;
+	font-family: inherit;
+}
+
+.PromptList button:hover,
+.RoleList button:hover {
+	transform: translateY(-1px);
+}
+
+/* ----- Script field (Commands only) ----- */
+.ScriptField {
+	background: rgba(255, 255, 255, 0.25);
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 14px;
+	padding: 10px;
+	min-width: 0;
+}
+
+.ScriptFieldHeader h3 {
+	margin: 0 0 8px;
+	font-size: 12px;
+	opacity: 0.95;
+}
+
+.ScriptFieldActions {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.ScriptHint {
+	font-size: 12px;
+	opacity: 0.75;
+}
+
+.ScriptFieldUpload {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.ScriptFieldUpload input[type='file'] {
+	width: 100%;
+}
+
+.ScriptBtn {
+	padding: 8px 12px;
+	border-radius: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	background: rgba(255, 255, 255, 0.6);
+	cursor: pointer;
+	font-family: inherit;
+}
+
+.ScriptBtn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.ScriptBtn:hover:not(:disabled) {
+	transform: translateY(-1px);
+}
+
+.ScriptError {
+	color: #b00020;
+	font-size: 12px;
+	margin-top: 8px;
+}
+

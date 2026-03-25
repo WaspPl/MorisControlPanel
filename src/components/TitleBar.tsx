@@ -2,6 +2,7 @@ import { useTable } from '../context/TableContext';
 import Logo from './Logo';
 import TopBarButton from './TopBarButton';
 import { UserSharp } from 'pixelarticons/react';
+import { useAuth } from '../features/auth/AuthContext';
 
 const Close = ({ size = 24, color = 'currentColor' }) => (
 	<svg width={size} height={size} viewBox='0 0 24 24' fill='none'>
@@ -13,10 +14,14 @@ const Close = ({ size = 24, color = 'currentColor' }) => (
 );
 
 function TitleBar() {
-	const { activeTable } = useTable();
+	const { activeTable, setExpandedWindowId } = useTable();
+	const { logout } = useAuth();
 	const handleUserClick = () => {};
 
-	const handleLogOut = () => {};
+	const handleLogOut = () => {
+		setExpandedWindowId(null);
+		logout();
+	};
 
 	return (
 		<div className='TitleBar'>

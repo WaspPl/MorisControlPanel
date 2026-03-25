@@ -1,10 +1,15 @@
+import { useAuth } from '../../features/auth/AuthContext';
+
 type Props = {
 	id: number;
 	text: string;
 	onDelete: (id: number) => Promise<void>;
+	canDelete?: boolean;
 };
 
-function Pill({ id, text, onDelete }: Props) {
+function Pill({ id, text, onDelete, canDelete = true }: Props) {
+	const { isAdmin } = useAuth();
+
 	const handleDelete = (event: any) => {
 		event.preventDefault();
 		onDelete(id);
@@ -12,7 +17,11 @@ function Pill({ id, text, onDelete }: Props) {
 	return (
 		<div className='Pill'>
 			{text}
-			<button onClick={handleDelete}>X</button>
+			{isAdmin && canDelete && (
+				<button type='button' onClick={handleDelete}>
+					X
+				</button>
+			)}
 		</div>
 	);
 }

@@ -1,21 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useTable } from '../../context/TableContext';
 import Pill from './Pill';
+import { useAuth } from '../../features/auth/AuthContext';
 
 type Role = { id: number; name: string };
 type Assignment = { id: number; role: Role };
 
 type Props = {
 	roleList?: Assignment[];
+	commandId?: number | null;
+	canEdit?: boolean;
 };
 
-function RoleList({ roleList }: Props) {
+function RoleList({ roleList, commandId = null, canEdit = false }: Props) {
 	const {
 		createRoleAssignment,
 		deleteRoleAssignmentById,
-		expandedWindowId,
 		getItems,
 	} = useTable();
+	const { isAdmin } = useAuth();
+	const canModify = isAdmin && canEdit;
 	const [allRoles, setAllRoles] = useState<Role[]>([]);
 	const [selectedRoleId, setSelectedRoleId] = useState<number | ''>('');
 	const [assignments, setAssignments] = useState<Assignment[]>(roleList || []);
@@ -29,8 +33,10 @@ function RoleList({ roleList }: Props) {
 			const roles = await getItems('Roles');
 			setAllRoles(roles || []);
 		};
-		loadRoles();
-	}, [getItems]);
+		if (canModify) {
+			loadRoles();
+		}
+	}, [getItems, canModify]);
 
 	const assignedRoleIds = new Set(
 		assignments.map((assignment) => assignment.role?.id).filter(Boolean),
@@ -49,10 +55,11 @@ function RoleList({ roleList }: Props) {
 	}, [availableRoles, selectedRoleId]);
 
 	const handleCreate = async () => {
-		if (!selectedRoleId || !expandedWindowId) return;
+		if (!canModify) return;
+		if (!commandId || !selectedRoleId) return;
 
 		const createdAssignment = await createRoleAssignment({
-			commandId: expandedWindowId,
+			commandId,
 			roleId: selectedRoleId,
 		});
 
@@ -72,6 +79,7 @@ function RoleList({ roleList }: Props) {
 	};
 
 	const handleDelete = async (id: number) => {
+		if (!canModify) return;
 		const deleted = await deleteRoleAssignmentById(id);
 		if (!deleted) return;
 		setAssignments((prev) => prev.filter((item) => item.id !== id));
@@ -79,40 +87,40 @@ function RoleList({ roleList }: Props) {
 
 	return (
 		<div className='RoleList'>
-			<div
-				onKeyDown={(event) => {
-					if (event.key === 'Enter') {
-						event.preventDefault();
-						handleCreate();
-					}
-				}}
-			>
-				<div className='Dropdown'>
-					<select
-						name='role'
-						id='role'
-						value={selectedRoleId}
-						onChange={(event) => {
-							const value = Number(event.target.value);
-							setSelectedRoleId(Number.isNaN(value) ? '' : value);
-						}}
-					>
-						<option value='' disabled>
-							{availableRoles.length
-								? '-- Select Role --'
-								: 'No available roles'}
-						</option>
-						{availableRoles.map((role) => (
-							<option key={role.id} value={role.id}>
-								{role.name}
+			{canModify && (
+				<div
+					onKeyDown={(event) => {
+						if (event.key === 'Enter') {
+							event.preventDefault();
+							handleCreate();
+						}
+					}}
+				>
+					<div className='Dropdown'>
+						<select
+							name='role'
+							id='role'
+							value={selectedRoleId}
+							onChange={(event) => {
+								const value = Number(event.target.value);
+								setSelectedRoleId(Number.isNaN(value) ? '' : value);
+							}}
+						>
+							<option value='' disabled>
+								{availableRoles.length ? '-- Select Role --' : 'No available roles'}
 							</option>
-						))}
-					</select>
+							{availableRoles.map((role) => (
+								<option key={role.id} value={role.id}>
+									{role.name}
+								</option>
+							))}
+						</select>
+					</div>
+					<button type='button' onClick={handleCreate}>
+						Add
+					</button>
 				</div>
-				<button type='button' onClick={handleCreate}>
-					Add
-				</button>
-			</div>
+			)}
 			<div className='List'>
 				{assignments.map((assignment) => (
 					<Pill
@@ -120,6 +128,7 @@ function RoleList({ roleList }: Props) {
 						id={assignment.id}
 						text={assignment.role?.name || `Role #${assignment.role?.id ?? ''}`}
 						onDelete={handleDelete}
+						canDelete={canModify}
 					/>
 				))}
 			</div>

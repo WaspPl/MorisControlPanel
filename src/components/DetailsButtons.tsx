@@ -1,4 +1,5 @@
-import Button from './Button';
+import Button from '../shared/ui/Button';
+import { useAuth } from '../features/auth/AuthContext';
 
 type Props = {
 	isEditing: boolean;
@@ -13,6 +14,10 @@ function DetailsButtons({
 	onDelete,
 	onCancel,
 }: Props) {
+	const { isAdmin } = useAuth();
+
+	if (!isAdmin) return null;
+
 	const handleEnableEditing = (event: any) => {
 		event.preventDefault();
 		setIsEditing(true);

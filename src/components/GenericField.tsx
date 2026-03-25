@@ -22,7 +22,7 @@ function GenericField({
 	onChange,
 	isExpanded = false,
 }: Props) {
-	const { type, name, label, lookupTable, apiKey } = fieldConfig;
+	const { type, name, label, lookupTable, apiKey, placeholder } = fieldConfig;
 
 	switch (type) {
 		case 'text':
@@ -35,6 +35,7 @@ function GenericField({
 					type={type}
 					value={value || ''}
 					isEditing={isEditing}
+					placeholder={placeholder}
 					setValue={(val: string | number) => onChange(name, val, apiKey)}
 				/>
 			);

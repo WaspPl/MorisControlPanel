@@ -5,8 +5,9 @@ import { Table_Schemas } from '../schemas/tableConfig';
 import TopBarButton from './TopBarButton';
 import { CopySharp, SquareSharp } from 'pixelarticons/react';
 import GenericField from './GenericField';
-import Button from './Button';
+import Button from '../shared/ui/Button';
 import BackgroundBlur from './BackgroundBlur';
+import { useAuth } from '../features/auth/AuthContext';
 
 type Props = {
 	table: TableType;
@@ -15,6 +16,7 @@ type Props = {
 function CreateWindow({ table }: Props) {
 	const { createItem, expandedWindowId, setExpandedWindowId, setItems, items } =
 		useTable();
+	const { isAdmin } = useAuth();
 
 	// States
 	const [isAnimating, setIsAnimating] = useState(false);
@@ -30,6 +32,8 @@ function CreateWindow({ table }: Props) {
 	});
 	const isExpanded = expandedWindowId === -1;
 	const schema = Table_Schemas[table];
+
+	if (!isAdmin) return null;
 
 	//UseEffect
 	useEffect(() => {

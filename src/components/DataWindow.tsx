@@ -7,6 +7,7 @@ import GenericField from './GenericField';
 import TopBarButton from './TopBarButton';
 import DetailsButtons from './DetailsButtons';
 import BackgroundBlur from './BackgroundBlur';
+import CommandsDetailsEditor from '../features/controlPanel/commands/CommandsDetailsEditor';
 
 type Props = {
 	data: any;
@@ -117,23 +118,36 @@ function DataWindow({ data, table }: Props) {
 
 				<form onSubmit={handleSave}>
 					<div className='FormWrapper'>
-						{schema.fields.map((field) => {
-							if (!isExpanded && !schema.summary.includes(field.name))
-								return null;
-							const valueKey = currentData[field.apiKey]
-								? field.apiKey
-								: field.name;
-							return (
-								<GenericField
-									key={field.name}
-									fieldConfig={field}
-									value={currentData[valueKey]}
-									isEditing={isEditing}
-									onChange={handleFieldChange}
-									isExpanded={isExpanded}
-								/>
-							);
-						})}
+						{isExpanded && table === 'Commands' ? (
+							<CommandsDetailsEditor
+								schema={schema}
+								currentData={currentData}
+								isExpanded={isExpanded}
+								isEditing={isEditing}
+								onChange={handleFieldChange}
+							/>
+						) : (
+							schema.fields.map((field) => {
+								if (
+									!isExpanded &&
+									!schema.summary.includes(field.name)
+								)
+									return null;
+								const valueKey = currentData[field.apiKey]
+									? field.apiKey
+									: field.name;
+								return (
+									<GenericField
+										key={field.name}
+										fieldConfig={field}
+										value={currentData[valueKey]}
+										isEditing={isEditing}
+										onChange={handleFieldChange}
+										isExpanded={isExpanded}
+									/>
+								);
+							})
+						)}
 					</div>
 
 					<AnimatePresence>

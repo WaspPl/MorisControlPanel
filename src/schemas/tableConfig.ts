@@ -16,6 +16,7 @@ export interface FieldConfig {
 	label: string;
 	type: FieldType;
 	lookupTable?: TableType;
+	placeholder?: string;
 }
 
 export interface TableSchema {
@@ -29,12 +30,19 @@ export const Table_Schemas: Record<TableType, TableSchema> = {
 		summary: ['username', 'role'],
 		create: ['username', 'password', 'role', 'llm_prefix'],
 		fields: [
-			{ name: 'username', label: 'Username', type: 'text', apiKey: 'username' },
+			{
+				name: 'username',
+				label: 'Username',
+				type: 'text',
+				apiKey: 'username',
+				placeholder: 'Enter username',
+			},
 			{
 				name: 'password',
 				label: 'Password',
 				type: 'password',
 				apiKey: 'password',
+				placeholder: 'Enter password',
 			},
 			{
 				name: 'role',
@@ -48,13 +56,16 @@ export const Table_Schemas: Record<TableType, TableSchema> = {
 				label: 'LLM Prefix',
 				type: 'text',
 				apiKey: 'llm_prefix',
+				placeholder: 'Prefix prepended before prompts',
 			},
 		],
 	},
 	Roles: {
 		summary: ['name'],
 		create: ['name'],
-		fields: [{ name: 'name', label: 'Name', type: 'text', apiKey: 'name' }],
+		fields: [
+			{ name: 'name', label: 'Name', type: 'text', apiKey: 'name', placeholder: 'Role name' },
+		],
 	},
 	Commands: {
 		summary: ['name', 'description', 'sprite', 'is_output_llm'],
@@ -67,12 +78,19 @@ export const Table_Schemas: Record<TableType, TableSchema> = {
 			'llm_prefix',
 		],
 		fields: [
-			{ name: 'name', label: 'Name', type: 'text', apiKey: 'name' },
+			{
+				name: 'name',
+				label: 'Name',
+				type: 'text',
+				apiKey: 'name',
+				placeholder: 'Command name',
+			},
 			{
 				name: 'description',
 				label: 'Description',
 				type: 'text',
 				apiKey: 'description',
+				placeholder: 'What does this command do?',
 			},
 			{
 				name: 'sprite',
@@ -98,6 +116,7 @@ export const Table_Schemas: Record<TableType, TableSchema> = {
 				label: 'LLM Prefix',
 				type: 'text',
 				apiKey: 'llm_prefix',
+				placeholder: 'Prefix prepended before prompts',
 			},
 			{
 				name: 'assignments',
@@ -117,7 +136,7 @@ export const Table_Schemas: Record<TableType, TableSchema> = {
 		summary: ['name'],
 		create: ['name', 'content'],
 		fields: [
-			{ name: 'name', label: 'Name', type: 'text', apiKey: 'name' },
+			{ name: 'name', label: 'Name', type: 'text', apiKey: 'name', placeholder: 'Sprite name' },
 			{ name: 'content', label: 'Image', type: 'image', apiKey: 'content' },
 		],
 	},
