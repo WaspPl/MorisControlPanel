@@ -1,11 +1,11 @@
 import type { TableType } from '../context/TableContext';
 import type { FieldConfig } from '../schemas/tableConfig';
-import Dropdown from './Fields/Dropdown';
-import ForeignField from './Fields/ForeignField';
-import ImageField from './Fields/ImageField';
-import Input from './Fields/Input';
-import ListField from './Fields/ListField';
-import PromptList from './Fields/PromptList';
+import Dropdown from './fields/Dropdown';
+import ForeignField from './fields/ForeignField';
+import ImageField from './fields/ImageField';
+import Input from './fields/Input';
+import PromptList from './fields/PromptList';
+import RoleList from './fields/RoleList';
 
 interface Props {
 	fieldConfig: FieldConfig;
@@ -75,17 +75,9 @@ function GenericField({
 				/>
 			);
 		case 'dropdownList':
-			return (
-				<ListField
-					label={label}
-					items={value || []}
-					isEditing={isEditing}
-					type={type}
-					onChange={(newValue) => onChange(name, newValue, apiKey)}
-				/>
-			);
+			return <RoleList roleList={value || []} />;
 		case 'inputList':
-			return <PromptList promptList={value} />;
+			return <PromptList promptList={value || []} />;
 		case 'image':
 			return (
 				<ImageField

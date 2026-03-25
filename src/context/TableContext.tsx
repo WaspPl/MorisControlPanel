@@ -24,7 +24,7 @@ interface TableContextType {
 	setExpandedWindowId: (id: number | null) => void;
 	sleep: (ms: number) => Promise<any>;
 	createRoleAssignment: (data: any) => Promise<any>;
-	deleteRoleAssignmentById: (id: number) => Promise<any>;
+	deleteRoleAssignmentById: (id: number) => Promise<boolean>;
 	createPrompt: (data: {
 		text: string;
 		commandId: number | null;
@@ -119,9 +119,13 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		roleId: number;
 	}) => {
 		try {
+			const payload = {
+				command_id: data.commandId,
+				role_id: data.roleId,
+			};
 			const response = await axios.post(
 				`${API_BASE}/role_assignments`,
-				data,
+				payload,
 				getAuthHeaders(),
 			);
 			return response.data;
@@ -132,14 +136,15 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 	};
 	const deleteRoleAssignmentById = async (id: number) => {
 		try {
-			const response = await axios.delete(
+			await axios.delete(
 				`${API_BASE}/role_assignments/${id}`,
 				getAuthHeaders(),
 			);
-			return response.data;
+			return true;
 		} catch (error) {
 			// showErrorNotification("Failed to delete an assignment");
 			console.error(error);
+			return false;
 		}
 	};
 	const createPrompt = async (data: {
@@ -147,9 +152,13 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		commandId: number | null;
 	}) => {
 		try {
+			const payload = {
+				text: data.text,
+				command_id: data.commandId,
+			};
 			const response = await axios.post(
 				`${API_BASE}/prompts`,
-				data,
+				payload,
 				getAuthHeaders(),
 			);
 			return response.data;

@@ -1,8 +1,130 @@
-type Props = {};
+import { useEffect, useState } from 'react';
+import { useTable } from '../../context/TableContext';
+import Pill from './Pill';
 
-function RoleList({}: Props) {
-	// The same as with PromptList, id like to make this properly in the future
-	return <div>RoleList</div>;
+type Role = { id: number; name: string };
+type Assignment = { id: number; role: Role };
+
+type Props = {
+	roleList?: Assignment[];
+};
+
+function RoleList({ roleList }: Props) {
+	const {
+		createRoleAssignment,
+		deleteRoleAssignmentById,
+		expandedWindowId,
+		getItems,
+	} = useTable();
+	const [allRoles, setAllRoles] = useState<Role[]>([]);
+	const [selectedRoleId, setSelectedRoleId] = useState<number | ''>('');
+	const [assignments, setAssignments] = useState<Assignment[]>(roleList || []);
+
+	useEffect(() => {
+		setAssignments(roleList || []);
+	}, [roleList]);
+
+	useEffect(() => {
+		const loadRoles = async () => {
+			const roles = await getItems('Roles');
+			setAllRoles(roles || []);
+		};
+		loadRoles();
+	}, [getItems]);
+
+	const assignedRoleIds = new Set(
+		assignments.map((assignment) => assignment.role?.id).filter(Boolean),
+	);
+	const availableRoles = allRoles.filter(
+		(role) => !assignedRoleIds.has(role.id),
+	);
+
+	useEffect(() => {
+		if (
+			selectedRoleId &&
+			!availableRoles.some((role) => role.id === selectedRoleId)
+		) {
+			setSelectedRoleId('');
+		}
+	}, [availableRoles, selectedRoleId]);
+
+	const handleCreate = async () => {
+		if (!selectedRoleId || !expandedWindowId) return;
+
+		const createdAssignment = await createRoleAssignment({
+			commandId: expandedWindowId,
+			roleId: selectedRoleId,
+		});
+
+		if (!createdAssignment) return;
+
+		const roles = await getItems('Roles');
+		const selectedRole = roles?.find(
+			(role: Role) => role.id === selectedRoleId,
+		);
+		const assignmentWithRole = {
+			...createdAssignment,
+			role: selectedRole || createdAssignment.role,
+		};
+
+		setAssignments((prev) => [...prev, assignmentWithRole]);
+		setSelectedRoleId('');
+	};
+
+	const handleDelete = async (id: number) => {
+		const deleted = await deleteRoleAssignmentById(id);
+		if (!deleted) return;
+		setAssignments((prev) => prev.filter((item) => item.id !== id));
+	};
+
+	return (
+		<div className='RoleList'>
+			<div
+				onKeyDown={(event) => {
+					if (event.key === 'Enter') {
+						event.preventDefault();
+						handleCreate();
+					}
+				}}
+			>
+				<div className='Dropdown'>
+					<select
+						name='role'
+						id='role'
+						value={selectedRoleId}
+						onChange={(event) => {
+							const value = Number(event.target.value);
+							setSelectedRoleId(Number.isNaN(value) ? '' : value);
+						}}
+					>
+						<option value='' disabled>
+							{availableRoles.length
+								? '-- Select Role --'
+								: 'No available roles'}
+						</option>
+						{availableRoles.map((role) => (
+							<option key={role.id} value={role.id}>
+								{role.name}
+							</option>
+						))}
+					</select>
+				</div>
+				<button type='button' onClick={handleCreate}>
+					Add
+				</button>
+			</div>
+			<div className='List'>
+				{assignments.map((assignment) => (
+					<Pill
+						key={assignment.id}
+						id={assignment.id}
+						text={assignment.role?.name || `Role #${assignment.role?.id ?? ''}`}
+						onDelete={handleDelete}
+					/>
+				))}
+			</div>
+		</div>
+	);
 }
 
 export default RoleList;

@@ -6,21 +6,20 @@ import { useTable } from '../../context/TableContext';
 type Prompt = { id: number; text: string };
 
 type Props = {
-	promptList: Prompt[];
+	promptList?: Prompt[];
 };
 
 function PromptList({ promptList }: Props) {
 	const { createPrompt, deletePromptById, expandedWindowId } = useTable();
 
 	const [inputValue, setInputValue] = useState<string>('');
-	const [prompts, setPrompts] = useState<Prompt[]>(promptList);
+	const [prompts, setPrompts] = useState<Prompt[]>(promptList || []);
 
 	useEffect(() => {
-		setPrompts(promptList);
+		setPrompts(promptList || []);
 	}, [promptList]);
 
-	const handleCreate = async (event: any) => {
-		event.preventDefault();
+	const handleCreate = async () => {
 		if (!inputValue.trim()) return;
 
 		const newPrompt = await createPrompt({
@@ -35,14 +34,19 @@ function PromptList({ promptList }: Props) {
 	};
 
 	const handleDelete = async (id: number) => {
-		const success = await deletePromptById(id);
-		if (success) {
-			setPrompts((prev) => prev.filter((item) => item.id !== id));
-		}
+		await deletePromptById(id);
+		setPrompts((prev) => prev.filter((item) => item.id !== id));
 	};
 	return (
 		<div className='PromptList'>
-			<form onSubmit={handleCreate}>
+			<div
+				onKeyDown={(event) => {
+					if (event.key === 'Enter') {
+						event.preventDefault();
+						handleCreate();
+					}
+				}}
+			>
 				<Input
 					name='text'
 					type='text'
@@ -50,8 +54,10 @@ function PromptList({ promptList }: Props) {
 					setValue={setInputValue}
 					isEditing={true}
 				/>
-				<button type='submit' />
-			</form>
+				<button type='button' onClick={handleCreate}>
+					Add
+				</button>
+			</div>
 			<div className='List'>
 				{prompts &&
 					prompts.map((prompt) => (
