@@ -7,6 +7,7 @@ type Props = {
 	data: {
 		id: number;
 		username: string;
+		password: string | null;
 		role_id: number;
 		llm_prefix: string | null;
 	};
@@ -46,6 +47,14 @@ function UsersDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 				onChange={onFieldChange}
 				isEditing={isEditing}
 				label='Username'
+			/>
+			<Input
+				name='password'
+				type='password'
+				value={data.password}
+				onChange={onFieldChange}
+				isEditing={isEditing}
+				label='Password'
 			/>
 			<Dropdown
 				name='role_id'
