@@ -25,6 +25,7 @@ interface TableContextType {
 	setExpandedWindowId: (id: number | null) => void;
 	sleep: (ms: number) => Promise<any>;
 	setDefaultParams: () => void;
+	updateQueryParams: (paramsToUpdate: Record<string, string | null>) => void;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
@@ -128,11 +129,11 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 
 	const deleteItemById = async (table: TableType, id: number) => {
 		try {
-			const response = await axios.delete(
+			await axios.delete(
 				`${API_BASE}/${Routes[table]}/${id}`,
 				getAuthHeaders(),
 			);
-			return response.data;
+			return { status: 'ok' };
 		} catch (error) {
 			// showErrorNotification("Failed to delete item");
 			console.error(error);
@@ -152,6 +153,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		setExpandedWindowId,
 		sleep,
 		setDefaultParams,
+		updateQueryParams,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>

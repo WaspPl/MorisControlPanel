@@ -1,4 +1,5 @@
-import { useTable, type TableType } from '../context/TableContext';
+import { useTable, type TableType } from '../../context/TableContext';
+
 type Props = {
 	name: string;
 	item: { id: number; name: string };
@@ -7,13 +8,15 @@ type Props = {
 };
 
 function ForeignField({ name, item, foreignItemTable, label }: Props) {
-	const { setActiveTable, setExpandedWindowId, sleep } = useTable();
+	const { updateQueryParams } = useTable();
 
-	const handleClick = async () => {
+	const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
 		if (item?.id) {
-			setActiveTable(foreignItemTable);
-			await sleep(300);
-			setExpandedWindowId(item.id);
+			updateQueryParams({
+				activeTable: foreignItemTable,
+				expandedWindowId: item.id.toString(),
+			});
 		}
 	};
 	return (

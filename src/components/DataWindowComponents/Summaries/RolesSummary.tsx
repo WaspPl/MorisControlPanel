@@ -1,4 +1,4 @@
-import Input from '../Input';
+import Input from '../../fields/Input';
 
 type Props = {
 	data: {
@@ -7,7 +7,7 @@ type Props = {
 	};
 };
 
-function RolesData({ data }: Props) {
+function RolesSummary({ data }: Props) {
 	if (!data) return null;
 	return (
 		<form>
@@ -22,4 +22,4 @@ function RolesData({ data }: Props) {
 	);
 }
 
-export default RolesData;
+export default RolesSummary;

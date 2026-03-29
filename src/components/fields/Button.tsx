@@ -1,4 +1,4 @@
-type Variant = 'Success' | 'Failure' | 'Warning' | 'Primary' | 'Secondary';
+type Variant = 'Success' | 'Danger' | 'Warning' | 'Primary' | 'Secondary';
 
 type ButtonType = 'submit' | 'reset' | 'button' | undefined;
 

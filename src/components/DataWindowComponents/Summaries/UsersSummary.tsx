@@ -1,5 +1,5 @@
-import ForeignField from '../ForeignField';
-import Input from '../Input';
+import ForeignField from '../../fields/ForeignField';
+import Input from '../../fields/Input';
 
 type Props = {
 	data: {
@@ -12,7 +12,7 @@ type Props = {
 	};
 };
 
-function UsersData({ data }: Props) {
+function UsersSummary({ data }: Props) {
 	if (!data) return null;
 	return (
 		<form>
@@ -33,4 +33,4 @@ function UsersData({ data }: Props) {
 	);
 }
 
-export default UsersData;
+export default UsersSummary;

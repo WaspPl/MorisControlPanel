@@ -1,13 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTable } from '../context/TableContext';
-import UsersData from './DataComponents/UsersData';
-import UsersDetailsData from './DataComponents/UsersDetailsData';
 import TopBarButton from './TopBarButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SquareSharp, CopySharp } from 'pixelarticons/react';
-import UniversalData from './DataComponents/UniverstalData';
-import RolesData from './DataComponents/RolesData';
-import RolesDetailsData from './DataComponents/RolesDetailsData';
+import ItemDetails from './DataWindowComponents/ItemDetails';
+import ItemSummary from './DataWindowComponents/ItemSummary';
 
 type Props = {
 	data: any;
@@ -23,32 +20,10 @@ const Close = ({ size = 24, color = 'currentColor' }) => (
 );
 
 function DataWindow({ data }: Props) {
-	const {
-		activeTable,
-		getItemDetailsById,
-		expandedWindowId,
-		setExpandedWindowId,
-	} = useTable();
+	const { activeTable, expandedWindowId, setExpandedWindowId } = useTable();
 	const [isAnimating, setIsAnimating] = useState(false);
-	const [expandedData, setExpandedData] = useState(null);
-	const [reloadBool, setReloadBool] = useState(false);
-	const toggleReload = () => {
-		setReloadBool(!reloadBool);
-	};
 
 	const isExpanded: boolean = expandedWindowId == data.id;
-
-	const dataToDisplay = isExpanded ? expandedData : data;
-	const TableRegistry: Record<string, { summary: any; details: any }> = {
-		Users: { summary: UsersData, details: UsersDetailsData },
-		Roles: { summary: RolesData, details: RolesDetailsData },
-		Commands: { summary: UniversalData, details: UniversalData },
-		Sprites: { summary: UniversalData, details: UniversalData },
-	};
-
-	const Config = TableRegistry[activeTable] || TableRegistry['Users'];
-
-	const CurrentView = isExpanded ? Config.details : Config.summary;
 
 	const handleClickDetails = () => {
 		setExpandedWindowId(isExpanded ? null : data.id);
@@ -56,16 +31,6 @@ function DataWindow({ data }: Props) {
 	const closeDetals = () => {
 		setExpandedWindowId(null);
 	};
-
-	useEffect(() => {
-		if (isExpanded) {
-			const getData = async () => {
-				let result = await getItemDetailsById(activeTable, data.id);
-				setExpandedData(result);
-			};
-			getData();
-		}
-	}, [expandedWindowId, reloadBool]);
 
 	return (
 		<div className='DataWindowHolder'>
@@ -102,7 +67,11 @@ function DataWindow({ data }: Props) {
 						<TopBarButton icon={Close} disabled />
 					</div>
 				</div>
-				<CurrentView data={dataToDisplay} reloadFunction={toggleReload} />
+				{isExpanded ? (
+					<ItemDetails table={activeTable} itemId={data.id} />
+				) : (
+					<ItemSummary table={activeTable} data={data} />
+				)}
 			</motion.div>
 		</div>
 	);

@@ -1,19 +1,16 @@
 type Props = {
 	name: string;
-	value: any;
-	setValue: (value: any) => void;
+	value: number;
 	isEditing: boolean;
 	choices: {
 		id: number;
 		name: string;
 	}[];
 	label?: string;
+	onChange?: (newValue: any, name: string) => void;
 };
 
-function Dropdown({ name, value, setValue, isEditing, choices, label }: Props) {
-	const handleChange = (event: any) => {
-		setValue(event.target.value);
-	};
+function Dropdown({ name, value, isEditing, choices, label, onChange }: Props) {
 	return (
 		<div className='Dropdown'>
 			{label && <label htmlFor={name}>{label}</label>}
@@ -21,7 +18,11 @@ function Dropdown({ name, value, setValue, isEditing, choices, label }: Props) {
 				name={name}
 				id={name}
 				value={value}
-				onChange={handleChange}
+				onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+					if (onChange) {
+						onChange(e.target.value, name);
+					}
+				}}
 				disabled={!isEditing}
 			>
 				{choices?.map((choice) => (
