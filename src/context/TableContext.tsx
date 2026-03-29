@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'cookies-js';
 import { createContext, useContext, useState, type ReactNode } from 'react';
+import { useSearchParams } from 'react-router';
 
 export type TableType = 'Users' | 'Roles' | 'Commands' | 'Sprites';
 const Routes = {
@@ -23,14 +24,47 @@ interface TableContextType {
 	expandedWindowId: number | null;
 	setExpandedWindowId: (id: number | null) => void;
 	sleep: (ms: number) => Promise<any>;
+	setDefaultParams: () => void;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
 
 export const TableProvider = ({ children }: { children: ReactNode }) => {
-	const [activeTable, setActiveTable] = useState<TableType>('Users');
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	const updateQueryParams = (paramsToUpdate: Record<string, string | null>) => {
+		const newParams = new URLSearchParams(searchParams);
+
+		Object.entries(paramsToUpdate).forEach(([key, value]) => {
+			if (value === null) {
+				newParams.delete(key);
+			} else {
+				newParams.set(key, value);
+			}
+		});
+		setSearchParams(newParams, { replace: true });
+	};
+
+	const setDefaultParams = () => {
+		const currentTable = searchParams.get('activeTable');
+
+		const validTables = Object.keys(Routes);
+		if (!currentTable || !validTables.includes(currentTable)) {
+			updateQueryParams({ activeTable: 'Users' });
+		}
+	};
+	const activeTable = (searchParams.get('activeTable') as TableType) || 'Users';
+	const setActiveTable = (newTable: TableType) =>
+		updateQueryParams({ activeTable: newTable });
+
+	const expandedWindowIdParam = searchParams.get('expandedWindowId');
+	const expandedWindowId = expandedWindowIdParam
+		? parseInt(expandedWindowIdParam)
+		: null;
+	const setExpandedWindowId = (newId: number | null) =>
+		updateQueryParams({ expandedWindowId: newId?.toString() ?? null });
+
 	const [items, setItems] = useState<any>([]);
-	const [expandedWindowId, setExpandedWindowId] = useState<number | null>(null);
 	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 	const API_BASE = 'http://localhost:8080';
 
@@ -117,6 +151,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		expandedWindowId,
 		setExpandedWindowId,
 		sleep,
+		setDefaultParams,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>
