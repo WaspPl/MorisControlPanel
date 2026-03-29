@@ -4,6 +4,7 @@ import RolesDetails from './Details/RolesDetails';
 import UsersDetails from './Details/UsersDetails';
 import UniversalData from './UniverstalData';
 import DetailsButtons from './DetailsButtons';
+import SpritesDetails from './Details/spritesDetails';
 
 type Props = {
 	table: TableType;
@@ -15,7 +16,7 @@ function ItemDetails({ table, itemId }: Props) {
 		Users: UsersDetails,
 		Roles: RolesDetails,
 		Commands: UniversalData,
-		Sprites: UniversalData,
+		Sprites: SpritesDetails,
 	};
 	const {
 		items,

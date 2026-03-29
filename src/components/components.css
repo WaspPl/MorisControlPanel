@@ -228,3 +228,25 @@ p {
 	aspect-ratio: 1/1;
 	height: 100%;
 }
+
+.spriteImage {
+	aspect-ratio: 1/1;
+	height: 100px;
+	image-rendering: pixelated;
+	object-fit: cover;
+	object-position: 0%;
+	border: 1px black solid;
+}
+.spriteImage:hover {
+	object-position: 100%;
+	transition: linear 10s;
+}
+
+.ImageInput {
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	display: none;
+}
