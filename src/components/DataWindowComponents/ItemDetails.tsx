@@ -90,13 +90,15 @@ function ItemDetails({ table, itemId }: Props) {
 				isEditing={isEditing}
 				onSave={handleSave}
 			/>
-			<DetailsButtons
-				isEditing={isEditing}
-				onSave={handleSave}
-				onCancel={handleCancel}
-				onDelete={handleDelete}
-				onEditClick={handleEnableEdit}
-			/>
+			{table == 'Roles' && (itemId == 1 || 2) ? null : (
+				<DetailsButtons
+					isEditing={isEditing}
+					onSave={handleSave}
+					onCancel={handleCancel}
+					onDelete={handleDelete}
+					onEditClick={handleEnableEdit}
+				/>
+			)}
 		</div>
 	);
 }

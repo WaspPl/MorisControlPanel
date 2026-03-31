@@ -1,3 +1,4 @@
+import { UploadSharp, ImageSharp } from 'pixelarticons/react';
 import React, { useRef } from 'react';
 
 type Props = {
@@ -32,23 +33,40 @@ function Image({ name, srcBase64, onChange, isEditing, label }: Props) {
 	return (
 		<div>
 			{label && <label htmlFor={name}>{label}</label>}
-
-			<img
+			<div
 				id={name}
-				className={`spriteImage ${isEditing ? 'editable' : ''}`}
-				src={`data:image/png;base64,${srcBase64}`}
-				alt={label || name}
+				className='ImageField'
 				onClick={handleClick}
-				style={{ cursor: isEditing ? 'pointer' : 'default', maxWidth: '200px' }}
-			/>
-			<input
-				className='ImageInput'
-				type='file'
-				ref={fileInputRef}
-				disabled={!isEditing}
-				accept='image/*'
-				onChange={handleFileChange}
-			/>
+				style={{
+					cursor: isEditing ? 'pointer' : 'default',
+					maxWidth: '200px',
+				}}
+			>
+				{srcBase64 ? (
+					<img
+						className={`spriteImage`}
+						src={`data:image/png;base64,${srcBase64}`}
+						alt={label || name}
+					/>
+				) : (
+					<div className='spriteIcon'>
+						{isEditing ? (
+							<UploadSharp width={48} height={48} />
+						) : (
+							<ImageSharp width={48} height={48} />
+						)}
+					</div>
+				)}
+
+				<input
+					className='ImageInput'
+					type='file'
+					ref={fileInputRef}
+					disabled={!isEditing}
+					accept='image/*'
+					onChange={handleFileChange}
+				/>
+			</div>
 		</div>
 	);
 }

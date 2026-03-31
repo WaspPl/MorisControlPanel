@@ -229,6 +229,11 @@ p {
 	height: 100%;
 }
 
+.ImageField {
+	aspect-ratio: 1/1;
+	height: 100px;
+}
+
 .spriteImage {
 	aspect-ratio: 1/1;
 	height: 100px;
@@ -249,4 +254,12 @@ p {
 	height: 100%;
 	position: fixed;
 	display: none;
+}
+
+.spriteIcon {
+	display: flex;
+	aspect-ratio: 1/1;
+	height: 100px;
+	justify-content: center;
+	align-items: center;
 }
