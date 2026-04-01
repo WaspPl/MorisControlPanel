@@ -34,6 +34,8 @@ interface TableContextType {
 	sleep: (ms: number) => Promise<any>;
 	setDefaultParams: () => void;
 	updateQueryParams: (paramsToUpdate: Record<string, string | null>) => void;
+	getScript: (id: number) => Promise<any>;
+	createScript: (id: number, script: File) => Promise<any>;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
@@ -147,6 +149,39 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			console.error(error);
 		}
 	};
+	const getScript = async (commandId: number) => {
+		try {
+			const file = await axios.get(
+				`${API_BASE}/${Routes['Commands']}/${commandId}/script`,
+				{
+					...getAuthHeaders(),
+					responseType: 'blob',
+				},
+			);
+			return file.data;
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const createScript = async (commandId: number, script: File) => {
+		try {
+			const formData = new FormData();
+			formData.append('file', script);
+			const file = await axios.put(
+				`${API_BASE}/${Routes['Commands']}/${commandId}/script`,
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `Bearer ${Cookies.get('token')}`,
+					},
+				},
+			);
+			return file;
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	const valuesToExport = {
 		activeTable,
 		setActiveTable,
@@ -162,6 +197,8 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		sleep,
 		setDefaultParams,
 		updateQueryParams,
+		getScript,
+		createScript,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>

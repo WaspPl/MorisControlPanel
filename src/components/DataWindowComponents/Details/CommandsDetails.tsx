@@ -5,6 +5,7 @@ import { useTable } from '../../../context/TableContext';
 import Toggle from '../../fields/Toggle';
 import RoleList from '../../fields/RoleList';
 import PromptList from '../../fields/PromptList';
+import FileField from '../../fields/FileField';
 type Props = {
 	data: {
 		id: number;
@@ -32,7 +33,8 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 	const [promptInput, setPromptInput] = useState('');
 	const [assignmentInput, setAssignmentInput] = useState(0);
 
-	const { getItems, createItem, deleteItemById } = useTable();
+	const { getItems, createItem, deleteItemById, getScript, createScript } =
+		useTable();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -80,6 +82,31 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 		const response = await deleteItemById('Prompts', id);
 		if (response) {
 			setPrompts(prompts.filter((p) => p.id != id));
+		}
+	};
+
+	const handleScriptDownload = async () => {
+		const blob = await getScript(data.id);
+
+		if (blob) {
+			const url = window.URL.createObjectURL(blob);
+
+			const link = document.createElement('a');
+			link.href = url;
+
+			link.setAttribute('download', `script_${data.id}.py`);
+
+			document.body.appendChild(link);
+			link.click();
+
+			link.parentNode?.removeChild(link);
+			window.URL.revokeObjectURL(url);
+		}
+	};
+	const handleScriptUpload = async (script: File) => {
+		const success = await createScript(data.id, script);
+		if (success) {
+			alert('Upload successful!');
 		}
 	};
 	return (
@@ -140,6 +167,13 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 					label='LLM Prefix'
 				/>
 			</form>
+			<FileField
+				name='script'
+				label='Script '
+				isEditing={isEditing}
+				onUpload={handleScriptUpload}
+				onDownload={handleScriptDownload}
+			/>
 			<RoleList
 				name='assignments'
 				value={assignmentInput}
