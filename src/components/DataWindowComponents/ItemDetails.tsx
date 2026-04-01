@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useTable, type TableType } from '../../context/TableContext';
 import RolesDetails from './Details/RolesDetails';
 import UsersDetails from './Details/UsersDetails';
-import UniversalData from './UniverstalData';
 import DetailsButtons from './DetailsButtons';
 import SpritesDetails from './Details/spritesDetails';
+import CommandsDetails from './Details/CommandsDetails';
 
 type Props = {
 	table: TableType;
@@ -15,7 +15,7 @@ function ItemDetails({ table, itemId }: Props) {
 	const TableRegistry: Record<string, any> = {
 		Users: UsersDetails,
 		Roles: RolesDetails,
-		Commands: UniversalData,
+		Commands: CommandsDetails,
 		Sprites: SpritesDetails,
 	};
 	const {

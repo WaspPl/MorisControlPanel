@@ -2,7 +2,7 @@ import { useTable, type TableType } from '../../context/TableContext';
 
 type Props = {
 	name: string;
-	item: { id: number; name: string };
+	item?: { id: number; name: string };
 	foreignItemTable: TableType;
 	label?: string;
 };
@@ -23,7 +23,7 @@ function ForeignField({ name, item, foreignItemTable, label }: Props) {
 		<div className='Input'>
 			{label && <label htmlFor={name}>{label}</label>}
 			<button id={name} onClick={handleClick}>
-				{item?.name}
+				{item ? item.name : 'Unassigned'}
 			</button>
 		</div>
 	);

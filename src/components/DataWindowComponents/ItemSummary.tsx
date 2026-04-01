@@ -1,8 +1,8 @@
 import type { TableType } from '../../context/TableContext';
+import CommandsSummary from './Summaries/CommandsSummary';
 import RolesSummary from './Summaries/RolesSummary';
 import SpritesSummary from './Summaries/SpritesSummary';
 import UsersSummary from './Summaries/UsersSummary';
-import UniversalData from './UniverstalData';
 
 type Props = {
 	table: TableType;
@@ -13,7 +13,7 @@ function ItemSummary({ table, data }: Props) {
 	const TableRegistry: Record<string, any> = {
 		Users: UsersSummary,
 		Roles: RolesSummary,
-		Commands: UniversalData,
+		Commands: CommandsSummary,
 		Sprites: SpritesSummary,
 	};
 

@@ -3,12 +3,20 @@ import Cookies from 'cookies-js';
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router';
 
-export type TableType = 'Users' | 'Roles' | 'Commands' | 'Sprites';
+export type TableType =
+	| 'Users'
+	| 'Roles'
+	| 'Commands'
+	| 'Sprites'
+	| 'Assignments'
+	| 'Prompts';
 const Routes = {
 	Users: 'users',
 	Roles: 'roles',
 	Commands: 'commands',
 	Sprites: 'sprites',
+	Assignments: 'role_assignments',
+	Prompts: 'prompts',
 };
 
 interface TableContextType {

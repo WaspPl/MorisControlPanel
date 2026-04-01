@@ -1,6 +1,6 @@
 type Props = {
 	name: string;
-	value: number;
+	value?: number;
 	isEditing: boolean;
 	choices: {
 		id: number;
@@ -17,7 +17,7 @@ function Dropdown({ name, value, isEditing, choices, label, onChange }: Props) {
 			<select
 				name={name}
 				id={name}
-				value={value}
+				value={value || ''}
 				onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
 					if (onChange) {
 						onChange(e.target.value, name);
@@ -25,6 +25,7 @@ function Dropdown({ name, value, isEditing, choices, label, onChange }: Props) {
 				}}
 				disabled={!isEditing}
 			>
+				<option value={''}>--null--</option>
 				{choices?.map((choice) => (
 					<option key={choice.id} value={choice.id}>
 						{choice.name}
