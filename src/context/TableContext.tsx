@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'cookies-js';
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 
 export type TableType =
 	| 'Users'
@@ -9,7 +9,8 @@ export type TableType =
 	| 'Commands'
 	| 'Sprites'
 	| 'Assignments'
-	| 'Prompts';
+	| 'Prompts'
+	| 'Me';
 const Routes = {
 	Users: 'users',
 	Roles: 'roles',
@@ -17,6 +18,7 @@ const Routes = {
 	Sprites: 'sprites',
 	Assignments: 'role_assignments',
 	Prompts: 'prompts',
+	Me: 'me',
 };
 
 interface TableContextType {
@@ -36,11 +38,20 @@ interface TableContextType {
 	updateQueryParams: (paramsToUpdate: Record<string, string | null>) => void;
 	getScript: (id: number) => Promise<any>;
 	createScript: (id: number, script: File) => Promise<any>;
+	currentUser: {
+		id: number;
+		username: string;
+		role: { id: number; name: string };
+		llm_prefix: string;
+	} | null;
+	login: (username: string, password: string) => Promise<void>;
+	logout: () => void;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
 
 export const TableProvider = ({ children }: { children: ReactNode }) => {
+	const navigate = useNavigate();
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const updateQueryParams = (paramsToUpdate: Record<string, string | null>) => {
@@ -74,10 +85,34 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		: null;
 	const setExpandedWindowId = (newId: number | null) =>
 		updateQueryParams({ expandedWindowId: newId?.toString() ?? null });
+	const API_BASE = 'http://localhost:8080';
+
+	const [currentUser, setCurrentUser] = useState<any>(null);
+
+	const login = async (username: string, password: string) => {
+		const formData = new URLSearchParams();
+		formData.append('username', username);
+		formData.append('password', password);
+		const response = await axios.post(`${API_BASE}/token`, formData, {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+		});
+		if (response) {
+			Cookies.set('token', response.data.access_token);
+			setCurrentUser(await getItems('Me'));
+			navigate('/panel');
+		}
+	};
+
+	const logout = () => {
+		Cookies.set('token', null);
+		setCurrentUser(null);
+		navigate('/login');
+	};
 
 	const [items, setItems] = useState<any>([]);
 	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-	const API_BASE = 'http://localhost:8080';
 
 	const getAuthHeaders = () => ({
 		headers: { Authorization: `Bearer ${Cookies.get('token')}` },
@@ -199,6 +234,9 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		updateQueryParams,
 		getScript,
 		createScript,
+		currentUser,
+		login,
+		logout,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>

@@ -6,12 +6,19 @@ import ContentHolder from './components/ContentHolder';
 import Sidebar from './components/Sidebar';
 import TitleBar from './components/TitleBar';
 import { useTable } from './context/TableContext';
+import { Navigate } from 'react-router';
 
 function App() {
-	const { setDefaultParams } = useTable();
+	const { setDefaultParams, currentUser } = useTable();
 
+	if (!currentUser) {
+		return <Navigate to={'/login'} />;
+	}
 	useEffect(() => {
-		setDefaultParams();
+		if (currentUser) {
+			console.log(currentUser);
+			setDefaultParams();
+		}
 	}, []);
 	return (
 		<div className='App'>

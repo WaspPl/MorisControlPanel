@@ -4,7 +4,7 @@ import RolesDetails from './Details/RolesDetails';
 import UsersDetails from './Details/UsersDetails';
 import DetailsButtons from './DetailsButtons';
 import CommandsDetails from './Details/CommandsDetails';
-import SpritesDetails from './Details/SpritesDetails';
+import SpritesDetails from './Details/spritesDetails';
 
 type Props = {
 	table: TableType;

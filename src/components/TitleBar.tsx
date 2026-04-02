@@ -13,10 +13,12 @@ const Close = ({ size = 24, color = 'currentColor' }) => (
 );
 
 function TitleBar() {
-	const { activeTable } = useTable();
+	const { activeTable, logout } = useTable();
 	const handleUserClick = () => {};
 
-	const handleLogOut = () => {};
+	const handleLogOut = () => {
+		logout();
+	};
 
 	return (
 		<div className='TitleBar'>
