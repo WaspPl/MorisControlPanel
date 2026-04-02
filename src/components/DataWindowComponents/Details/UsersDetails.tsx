@@ -10,6 +10,9 @@ type Props = {
 		password: string | null;
 		role_id: number;
 		llm_prefix: string | null;
+		token_duration_minutes: number;
+		time_created: string;
+		time_updated: string;
 	};
 	onFieldChange: () => void;
 	isEditing: boolean;
@@ -65,12 +68,34 @@ function UsersDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 				label='Role'
 			/>
 			<Input
+				name='token_duration_minutes'
+				type='number'
+				value={data.token_duration_minutes}
+				onChange={onFieldChange}
+				isEditing={isEditing}
+				label='Token Duration'
+			/>
+			<Input
 				name='llm_prefix'
 				type='text'
 				value={data.llm_prefix}
 				onChange={onFieldChange}
 				isEditing={isEditing}
 				label='LLM Prefix'
+			/>
+			<Input
+				name='time_updated'
+				type='datetime-local'
+				value={data?.time_updated.replace('T', ' ')}
+				isEditing={false}
+				label='Updated at'
+			/>
+			<Input
+				name='time_created'
+				type='datetime-local'
+				value={data?.time_created.replace('T', ' ')}
+				isEditing={false}
+				label='Created at'
 			/>
 		</form>
 	);

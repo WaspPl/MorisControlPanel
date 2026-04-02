@@ -57,6 +57,8 @@ interface TableContextType {
 	login: (username: string, password: string) => Promise<void>;
 	logout: () => void;
 	isLoading: boolean;
+	notifications: any;
+	removeNotification: (id: string) => void;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
@@ -65,6 +67,18 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 	const navigate = useNavigate();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoading, setIsLoading] = useState(true);
+	const [notifications, setNotifications] = useState<any[]>([]);
+
+	const addNotification = (code: number, content: string) => {
+		setNotifications([
+			...notifications,
+			{ id: crypto.randomUUID(), status: code, content: content },
+		]);
+	};
+
+	const removeNotification = (id: string) => {
+		setNotifications((prev) => prev.filter((n) => n.id !== id));
+	};
 
 	const updateQueryParams = (paramsToUpdate: Record<string, string | null>) => {
 		const newParams = new URLSearchParams(searchParams);
@@ -105,14 +119,22 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		const formData = new URLSearchParams();
 		formData.append('username', username);
 		formData.append('password', password);
-		const response = await axios.post(`${API_BASE}/token`, formData, {
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-		});
-		if (response) {
-			Cookies.set('token', response.data.access_token);
-			navigate('/panel');
+		try {
+			const response = await axios.post(`${API_BASE}/token`, formData, {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			});
+			if (response) {
+				Cookies.set('token', response.data.access_token);
+				navigate('/panel');
+			}
+		} catch (error: any) {
+			const status = error.response?.status;
+			addNotification(
+				status || 500,
+				error.response?.data.detail || 'Oops, server had an issue with that',
+			);
 		}
 	};
 
@@ -153,7 +175,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			if (status === 401) {
 				logout();
 			} else {
-				// showErrorNotification("Failed to fetch items");
+				addNotification(status, error.response?.detail);
 			}
 		}
 	};
@@ -171,7 +193,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			if (status === 401) {
 				logout();
 			} else {
-				// showErrorNotification("Failed to fetch items");
+				addNotification(status, error.response?.detail);
 			}
 		}
 	};
@@ -183,6 +205,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				data,
 				getAuthHeaders(),
 			);
+			addNotification(response.status, 'Create successful!');
 			return response.data;
 		} catch (error: any) {
 			const status = error.response?.status;
@@ -190,7 +213,10 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			if (status === 401) {
 				logout();
 			} else {
-				// showErrorNotification("Failed to fetch items");
+				addNotification(
+					status || 500,
+					error.response?.data.detail || 'Oops, server had an issue with that',
+				);
 			}
 		}
 	};
@@ -301,6 +327,8 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		login,
 		logout,
 		isLoading,
+		notifications,
+		removeNotification,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>

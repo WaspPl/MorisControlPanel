@@ -9,6 +9,7 @@ type Props = {
 			id: number;
 			name: string;
 		};
+		time_updated: string;
 	};
 };
 
@@ -28,6 +29,13 @@ function UsersSummary({ data }: Props) {
 				item={data?.role}
 				foreignItemTable='Roles'
 				label='Role'
+			/>
+			<Input
+				name='time_updated'
+				type='datetime-local'
+				value={data?.time_updated.replace('T', ' ')}
+				isEditing={false}
+				label='Updated at'
 			/>
 		</form>
 	);

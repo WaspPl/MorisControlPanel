@@ -14,6 +14,7 @@ type Props = {
 		sprite_repeat_times: number;
 		is_output_llm: boolean;
 		llm_prefix?: string;
+		time_updated: string;
 	};
 };
 
@@ -46,6 +47,13 @@ function CommandsSummary({ data }: Props) {
 				value={data?.is_output_llm}
 				isEditing={false}
 				label='LLM Output'
+			/>
+			<Input
+				name='time_updated'
+				type='datetime-local'
+				value={data?.time_updated.replace('T', ' ')}
+				isEditing={false}
+				label='Updated at'
 			/>
 		</form>
 	);

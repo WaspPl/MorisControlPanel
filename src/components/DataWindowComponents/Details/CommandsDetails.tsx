@@ -17,6 +17,8 @@ type Props = {
 		llm_prefix?: string;
 		prompts: { id: number; text: string }[];
 		assignments: { id: number; role: { id: number; name: string } }[];
+		time_created: string;
+		time_updated: string;
 	};
 	onFieldChange: () => void;
 	isEditing: boolean;
@@ -165,6 +167,20 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 					onChange={onFieldChange}
 					isEditing={isEditing}
 					label='LLM Prefix'
+				/>
+				<Input
+					name='time_updated'
+					type='datetime-local'
+					value={data?.time_updated.replace('T', ' ')}
+					isEditing={false}
+					label='Updated at'
+				/>
+				<Input
+					name='time_created'
+					type='datetime-local'
+					value={data?.time_created.replace('T', ' ')}
+					isEditing={false}
+					label='Created at'
 				/>
 			</form>
 			<FileField

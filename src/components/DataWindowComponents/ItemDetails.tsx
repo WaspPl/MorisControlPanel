@@ -69,6 +69,11 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 					return item;
 				}),
 			);
+			setDraft((prev: any) => {
+				const updated = { ...prev };
+				updated['time_updated'] = updatedItem.time_updated;
+				return updated;
+			});
 			setData(draft);
 			setIsEditing(false);
 		}

@@ -8,6 +8,7 @@ type Props = {
 		id: number;
 		username: string;
 		password: string | null;
+		token_duration_minutes: number;
 		role_id: number;
 		llm_prefix: string | null;
 	};
@@ -24,6 +25,7 @@ function UsersCreate({ data, onFieldChange, isEditing, onSave }: Props) {
 	const defaultValues = {
 		username: '',
 		password: '',
+		token_duration_minutes: 30,
 		role_id: 2,
 		llm_prefix: '',
 	};
@@ -68,6 +70,14 @@ function UsersCreate({ data, onFieldChange, isEditing, onSave }: Props) {
 				isEditing={isEditing}
 				choices={roles}
 				label='Role'
+			/>
+			<Input
+				name='token_duration_minutes'
+				type='number'
+				value={data?.token_duration_minutes}
+				onChange={onFieldChange}
+				isEditing={isEditing}
+				label='Token Duration'
 			/>
 			<Input
 				name='llm_prefix'

@@ -276,3 +276,22 @@ p {
 	position: relative;
 	top: 100vh;
 }
+
+.NotificationHolder {
+	width: 300px;
+	height: 100%;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1000;
+	pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: end;
+}
+
+.Notification {
+	width: 250px;
+	height: 100px;
+	pointer-events: auto;
+}

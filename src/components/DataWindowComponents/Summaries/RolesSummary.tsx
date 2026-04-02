@@ -4,6 +4,7 @@ type Props = {
 	data: {
 		id: number;
 		name: string;
+		time_updated: string;
 	};
 };
 
@@ -17,6 +18,13 @@ function RolesSummary({ data }: Props) {
 				value={data?.name}
 				isEditing={false}
 				label='Name'
+			/>
+			<Input
+				name='time_updated'
+				type='datetime-local'
+				value={data?.time_updated.replace('T', ' ')}
+				isEditing={false}
+				label='Updated at'
 			/>
 		</form>
 	);

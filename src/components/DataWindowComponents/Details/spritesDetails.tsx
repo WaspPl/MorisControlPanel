@@ -5,6 +5,8 @@ type Props = {
 		id: number;
 		name: string;
 		content: string;
+		time_created: string;
+		time_updated: string;
 	};
 	onFieldChange: () => void;
 	isEditing: boolean;
@@ -36,6 +38,20 @@ function SpritesDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 				onChange={onFieldChange}
 				isEditing={isEditing}
 				label='Sprite'
+			/>
+			<Input
+				name='time_updated'
+				type='datetime-local'
+				value={data?.time_updated.replace('T', ' ')}
+				isEditing={false}
+				label='Updated at'
+			/>
+			<Input
+				name='time_created'
+				type='datetime-local'
+				value={data?.time_created.replace('T', ' ')}
+				isEditing={false}
+				label='Created at'
 			/>
 		</form>
 	);
