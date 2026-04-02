@@ -2,7 +2,7 @@ import Button from '../fields/Button';
 
 type Props = {
 	isEditing: boolean;
-	onSave: () => Promise<void>;
+	onSave: (event: any) => Promise<void>;
 	onEditClick: () => void;
 	onDelete: () => Promise<void>;
 	onCancel: () => void;

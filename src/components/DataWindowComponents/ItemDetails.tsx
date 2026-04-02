@@ -3,8 +3,8 @@ import { useTable, type TableType } from '../../context/TableContext';
 import RolesDetails from './Details/RolesDetails';
 import UsersDetails from './Details/UsersDetails';
 import DetailsButtons from './DetailsButtons';
-import SpritesDetails from './Details/spritesDetails';
 import CommandsDetails from './Details/CommandsDetails';
+import SpritesDetails from './Details/SpritesDetails';
 
 type Props = {
 	table: TableType;
@@ -90,7 +90,7 @@ function ItemDetails({ table, itemId }: Props) {
 				isEditing={isEditing}
 				onSave={handleSave}
 			/>
-			{table == 'Roles' && (itemId == 1 || 2) ? null : (
+			{table == 'Roles' && (itemId == 1 || itemId == 2) ? null : (
 				<DetailsButtons
 					isEditing={isEditing}
 					onSave={handleSave}

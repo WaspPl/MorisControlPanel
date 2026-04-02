@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useTable } from '../context/TableContext';
 import DataWindow from './DataWindow';
 import { useEffect } from 'react';
+import CreateWindow from './CreateWindow';
 
 function ContentHolder() {
 	const { items, activeTable, getItems, setItems } = useTable();
@@ -19,6 +20,7 @@ function ContentHolder() {
 			<div className='ListWrapper'>
 				<div className='ListHolder' key={activeTable}>
 					<AnimatePresence mode='popLayout'>
+						<CreateWindow id={-1} />
 						{items.map((item: any) => (
 							<motion.div
 								key={item.id}
