@@ -34,7 +34,7 @@ function ItemCreate({ table }: Props) {
 		const updatedItem = await createItem(table, draft);
 
 		if (updatedItem) {
-			setItems([...items, updatedItem]);
+			setItems([updatedItem, ...items]);
 			handleCancel();
 		}
 	};

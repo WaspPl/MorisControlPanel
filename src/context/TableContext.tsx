@@ -26,7 +26,12 @@ interface TableContextType {
 	setActiveTable: (table: TableType) => void;
 	items: any[];
 	setItems: (items: any[]) => void;
-	getItems: (table: TableType) => Promise<any>;
+	getItems: (
+		table: TableType,
+		limit?: number,
+		offset?: number,
+		descending?: boolean,
+	) => Promise<any>;
 	getItemDetailsById: (table: TableType, id: number) => Promise<any>;
 	createItem: (table: TableType, data: object) => Promise<any>;
 	updateItemById: (table: TableType, id: number, data: object) => Promise<any>;
@@ -118,10 +123,20 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		headers: { Authorization: `Bearer ${Cookies.get('token')}` },
 	});
 
-	const getItems = async (table: TableType) => {
+	const getItems = async (
+		table: TableType,
+		limit: number = 5,
+		offset: number = 0,
+		descending: boolean = true,
+	) => {
 		try {
+			const params = new URLSearchParams({
+				limit: limit.toString(),
+				offset: offset.toString(),
+				descending: descending.toString(),
+			}).toString();
 			const response = await axios.get(
-				`${API_BASE}/${Routes[table]}`,
+				`${API_BASE}/${Routes[table]}?${params}`,
 				getAuthHeaders(),
 			);
 			return response.data;
