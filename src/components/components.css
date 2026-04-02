@@ -92,6 +92,7 @@
 	width: calc(100% - var(--IconHolderWidth));
 	background-color: #cff;
 	padding: 30px;
+	overflow: hidden;
 }
 
 .DescriptionHolder h2,
@@ -100,26 +101,6 @@
 }
 p {
 	font-size: 12px;
-}
-
-.ListWrapper {
-	background: #eff;
-	border-radius: 40px;
-	height: 100%;
-	overflow: hidden;
-}
-.ListHolder {
-	box-sizing: border-box;
-	height: 100%;
-	width: 100%;
-	padding: 40px;
-
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 20px;
-	justify-items: center;
-	overflow-x: visible;
-	overflow-y: overlay;
 }
 
 .DataWindowHolder {
@@ -262,4 +243,36 @@ p {
 	height: 100px;
 	justify-content: center;
 	align-items: center;
+}
+
+.ListWrapper {
+	background: #eff;
+	border-radius: 40px;
+	height: 100%;
+	overflow: hidden;
+}
+.ListHolder {
+	box-sizing: border-box;
+	height: 100%;
+	width: 100%;
+	padding: 40px;
+
+	display: grid;
+	grid-template-columns: repeat(3, minmax(300px, 1fr));
+	gap: 20px;
+	justify-items: center;
+	overflow-x: visible;
+	overflow-y: overlay;
+}
+.LoadMore {
+	grid-column: 1 / -1;
+	padding: 20px 0;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.MeWindow {
+	position: relative;
+	top: 100vh;
 }

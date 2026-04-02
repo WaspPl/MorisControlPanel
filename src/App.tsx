@@ -6,20 +6,18 @@ import ContentHolder from './components/ContentHolder';
 import Sidebar from './components/Sidebar';
 import TitleBar from './components/TitleBar';
 import { useTable } from './context/TableContext';
-import { Navigate } from 'react-router';
 
 function App() {
-	const { setDefaultParams, currentUser } = useTable();
-
-	if (!currentUser) {
-		return <Navigate to={'/login'} />;
-	}
+	const { setDefaultParams, setCurrentUser, getItems, isLoading } = useTable();
 	useEffect(() => {
-		if (currentUser) {
-			console.log(currentUser);
-			setDefaultParams();
-		}
+		const getCurrentUser = async () => {
+			setCurrentUser(await getItems('Me'));
+		};
+		getCurrentUser();
+		setDefaultParams();
 	}, []);
+
+	if (isLoading) return <p>loading...</p>;
 	return (
 		<div className='App'>
 			<TitleBar />

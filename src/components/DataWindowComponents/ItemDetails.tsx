@@ -5,18 +5,22 @@ import UsersDetails from './Details/UsersDetails';
 import DetailsButtons from './DetailsButtons';
 import CommandsDetails from './Details/CommandsDetails';
 import SpritesDetails from './Details/spritesDetails';
+import MeDetails from './Details/MeDetails';
+import Cookies from 'cookies-js';
 
 type Props = {
 	table: TableType;
 	itemId: number;
+	isMe: boolean;
 };
 
-function ItemDetails({ table, itemId }: Props) {
+function ItemDetails({ table, itemId, isMe = false }: Props) {
 	const TableRegistry: Record<string, any> = {
 		Users: UsersDetails,
 		Roles: RolesDetails,
 		Commands: CommandsDetails,
 		Sprites: SpritesDetails,
+		Me: MeDetails,
 	};
 	const {
 		items,
@@ -25,8 +29,11 @@ function ItemDetails({ table, itemId }: Props) {
 		updateItemById,
 		setItems,
 		setExpandedWindowId,
+		currentUser,
+		logout,
+		setCurrentUser,
 	} = useTable();
-	const [data, setData] = useState(null);
+	const [data, setData] = useState<any>(null);
 	const [draft, setDraft] = useState<any>(null);
 	const [isEditing, setIsEditing] = useState(false);
 
@@ -36,7 +43,12 @@ function ItemDetails({ table, itemId }: Props) {
 			setData(result);
 			setDraft(result);
 		};
-		getData();
+		if (isMe) {
+			setData(currentUser);
+			setDraft(currentUser);
+		} else {
+			getData();
+		}
 	}, []);
 
 	const handleFieldChange = (newValue: any, ApiField: string) => {
@@ -78,6 +90,21 @@ function ItemDetails({ table, itemId }: Props) {
 		setIsEditing(true);
 	};
 
+	const handleMeSave = async () => {
+		const updatedItem = await updateItemById(table, null, draft);
+		if (updatedItem) {
+			Cookies.set('token', updatedItem.access_token);
+			setData(draft);
+			setCurrentUser(draft);
+			setIsEditing(false);
+		}
+	};
+	const handleMeDelete = async () => {
+		const response = await deleteItemById(table, null);
+		if (response) {
+			logout();
+		}
+	};
 	const ComponentToRender = TableRegistry[table];
 	if (!ComponentToRender) {
 		return <div>Table type not found</div>;
@@ -93,9 +120,9 @@ function ItemDetails({ table, itemId }: Props) {
 			{table == 'Roles' && (itemId == 1 || itemId == 2) ? null : (
 				<DetailsButtons
 					isEditing={isEditing}
-					onSave={handleSave}
+					onSave={isMe ? handleMeSave : handleSave}
 					onCancel={handleCancel}
-					onDelete={handleDelete}
+					onDelete={isMe ? handleMeDelete : handleDelete}
 					onEditClick={handleEnableEdit}
 				/>
 			)}

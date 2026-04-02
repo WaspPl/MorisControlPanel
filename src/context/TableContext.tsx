@@ -32,10 +32,14 @@ interface TableContextType {
 		offset?: number,
 		descending?: boolean,
 	) => Promise<any>;
-	getItemDetailsById: (table: TableType, id: number) => Promise<any>;
+	getItemDetailsById: (table: TableType, id: number | null) => Promise<any>;
 	createItem: (table: TableType, data: object) => Promise<any>;
-	updateItemById: (table: TableType, id: number, data: object) => Promise<any>;
-	deleteItemById: (table: TableType, id: number) => Promise<any>;
+	updateItemById: (
+		table: TableType,
+		id: number | null,
+		data: object,
+	) => Promise<any>;
+	deleteItemById: (table: TableType, id: number | null) => Promise<any>;
 	expandedWindowId: number | null;
 	setExpandedWindowId: (id: number | null) => void;
 	sleep: (ms: number) => Promise<any>;
@@ -46,11 +50,13 @@ interface TableContextType {
 	currentUser: {
 		id: number;
 		username: string;
-		role: { id: number; name: string };
+		role_id: number;
 		llm_prefix: string;
 	} | null;
+	setCurrentUser: (user: any) => void;
 	login: (username: string, password: string) => Promise<void>;
 	logout: () => void;
+	isLoading: boolean;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
@@ -58,6 +64,7 @@ const TableContext = createContext<TableContextType | undefined>(undefined);
 export const TableProvider = ({ children }: { children: ReactNode }) => {
 	const navigate = useNavigate();
 	const [searchParams, setSearchParams] = useSearchParams();
+	const [isLoading, setIsLoading] = useState(true);
 
 	const updateQueryParams = (paramsToUpdate: Record<string, string | null>) => {
 		const newParams = new URLSearchParams(searchParams);
@@ -105,7 +112,6 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		});
 		if (response) {
 			Cookies.set('token', response.data.access_token);
-			setCurrentUser(await getItems('Me'));
 			navigate('/panel');
 		}
 	};
@@ -139,23 +145,34 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				`${API_BASE}/${Routes[table]}?${params}`,
 				getAuthHeaders(),
 			);
+			setIsLoading(false);
 			return response.data;
-		} catch (error) {
-			// showErrorNotification("Failed to fetch items");
-			console.error(error);
+		} catch (error: any) {
+			const status = error.response?.status;
+
+			if (status === 401) {
+				logout();
+			} else {
+				// showErrorNotification("Failed to fetch items");
+			}
 		}
 	};
 
-	const getItemDetailsById = async (table: TableType, id: number) => {
+	const getItemDetailsById = async (table: TableType, id: number | null) => {
 		try {
-			const response = await axios.get(
-				`${API_BASE}/${Routes[table]}/${id}`,
-				getAuthHeaders(),
-			);
+			const path = id
+				? `${API_BASE}/${Routes[table]}/${id}`
+				: `${API_BASE}/${Routes[table]}`;
+			const response = await axios.get(path, getAuthHeaders());
 			return response.data;
-		} catch (error) {
-			// showErrorNotification("Failed to fetch details");
-			console.error(error);
+		} catch (error: any) {
+			const status = error.response?.status;
+
+			if (status === 401) {
+				logout();
+			} else {
+				// showErrorNotification("Failed to fetch items");
+			}
 		}
 	};
 
@@ -167,36 +184,54 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				getAuthHeaders(),
 			);
 			return response.data;
-		} catch (error) {
-			// showErrorNotification("Failed to create item");
-			console.error(error);
+		} catch (error: any) {
+			const status = error.response?.status;
+
+			if (status === 401) {
+				logout();
+			} else {
+				// showErrorNotification("Failed to fetch items");
+			}
 		}
 	};
 
-	const updateItemById = async (table: TableType, id: number, data: object) => {
+	const updateItemById = async (
+		table: TableType,
+		id: number | null,
+		data: object,
+	) => {
 		try {
-			const response = await axios.put(
-				`${API_BASE}/${Routes[table]}/${id}`,
-				data,
-				getAuthHeaders(),
-			);
+			const path = id
+				? `${API_BASE}/${Routes[table]}/${id}`
+				: `${API_BASE}/${Routes[table]}`;
+			const response = await axios.put(path, data, getAuthHeaders());
 			return response.data;
-		} catch (error) {
-			// showErrorNotification("Failed to update item");
-			console.error(error);
+		} catch (error: any) {
+			const status = error.response?.status;
+
+			if (status === 401) {
+				logout();
+			} else {
+				// showErrorNotification("Failed to fetch items");
+			}
 		}
 	};
 
-	const deleteItemById = async (table: TableType, id: number) => {
+	const deleteItemById = async (table: TableType, id: number | null) => {
 		try {
-			await axios.delete(
-				`${API_BASE}/${Routes[table]}/${id}`,
-				getAuthHeaders(),
-			);
+			const path = id
+				? `${API_BASE}/${Routes[table]}/${id}`
+				: `${API_BASE}/${Routes[table]}`;
+			await axios.delete(path, getAuthHeaders());
 			return { status: 'ok' };
-		} catch (error) {
-			// showErrorNotification("Failed to delete item");
-			console.error(error);
+		} catch (error: any) {
+			const status = error.response?.status;
+
+			if (status === 401) {
+				logout();
+			} else {
+				// showErrorNotification("Failed to fetch items");
+			}
 		}
 	};
 	const getScript = async (commandId: number) => {
@@ -209,8 +244,14 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				},
 			);
 			return file.data;
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			const status = error.response?.status;
+
+			if (status === 401) {
+				logout();
+			} else {
+				// showErrorNotification("Failed to fetch items");
+			}
 		}
 	};
 	const createScript = async (commandId: number, script: File) => {
@@ -228,8 +269,14 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				},
 			);
 			return file;
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			const status = error.response?.status;
+
+			if (status === 401) {
+				logout();
+			} else {
+				// showErrorNotification("Failed to fetch items");
+			}
 		}
 	};
 	const valuesToExport = {
@@ -250,8 +297,10 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		getScript,
 		createScript,
 		currentUser,
+		setCurrentUser,
 		login,
 		logout,
+		isLoading,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>

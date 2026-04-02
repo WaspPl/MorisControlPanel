@@ -6,19 +6,27 @@ import CreateWindow from './CreateWindow';
 import Button from './fields/Button';
 
 function ContentHolder() {
-	const { items, activeTable, getItems, setItems } = useTable();
+	const { items, activeTable, getItems, setItems, currentUser } = useTable();
 
 	const [isMore, setIsMore] = useState<boolean>(true);
 	useEffect(() => {
 		const fetchItems = async () => {
-			const items = await getItems(activeTable);
-			setItems(items);
+			const limit = currentUser?.role_id == 1 ? 5 : 6;
+			const fetched = await getItems(activeTable, limit);
+			setItems(fetched);
 		};
 		fetchItems();
+		setIsMore(true);
 	}, [activeTable]);
 
 	const loadMore = async () => {
-		const recieved = await getItems(activeTable, 6, items.length, true);
+		const itemsVisible = (currentUser?.role_id == 1 ? 1 : 0) + items.length;
+		const recieved = await getItems(
+			activeTable,
+			6 - (itemsVisible % 6),
+			items.length,
+			true,
+		);
 		if (recieved.length == 0) {
 			setIsMore(false);
 		}
@@ -30,7 +38,7 @@ function ContentHolder() {
 			<div className='ListWrapper'>
 				<div className='ListHolder' key={activeTable}>
 					<AnimatePresence mode='popLayout'>
-						<CreateWindow id={-1} />
+						{currentUser?.role_id == 1 && <CreateWindow id={-1} />}
 						{items.map((item: any) => (
 							<motion.div
 								key={item.id}
@@ -41,7 +49,7 @@ function ContentHolder() {
 								transition={{ duration: 0.2 }}
 								style={{ height: 'fit-content' }}
 							>
-								<DataWindow data={item} />
+								<DataWindow data={item} table={activeTable} isMe={false} />
 							</motion.div>
 						))}
 					</AnimatePresence>
@@ -51,6 +59,9 @@ function ContentHolder() {
 						</div>
 					)}
 				</div>
+			</div>
+			<div className='MeWindow'>
+				<DataWindow data={currentUser} table='Me' isMe={true} id={-2} />
 			</div>
 		</div>
 	);

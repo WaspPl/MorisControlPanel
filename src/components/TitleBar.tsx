@@ -13,8 +13,10 @@ const Close = ({ size = 24, color = 'currentColor' }) => (
 );
 
 function TitleBar() {
-	const { activeTable, logout } = useTable();
-	const handleUserClick = () => {};
+	const { activeTable, logout, setExpandedWindowId } = useTable();
+	const handleUserClick = () => {
+		setExpandedWindowId(-2);
+	};
 
 	const handleLogOut = () => {
 		logout();

@@ -3,6 +3,7 @@ import CommandsSummary from './Summaries/CommandsSummary';
 import RolesSummary from './Summaries/RolesSummary';
 import SpritesSummary from './Summaries/SpritesSummary';
 import UsersSummary from './Summaries/UsersSummary';
+import UniversalData from './UniverstalData';
 
 type Props = {
 	table: TableType;
@@ -15,6 +16,7 @@ function ItemSummary({ table, data }: Props) {
 		Roles: RolesSummary,
 		Commands: CommandsSummary,
 		Sprites: SpritesSummary,
+		Me: UniversalData,
 	};
 
 	const ComponentToRender = TableRegistry[table];

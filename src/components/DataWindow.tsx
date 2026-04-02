@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTable } from '../context/TableContext';
+import { useTable, type TableType } from '../context/TableContext';
 import TopBarButton from './TopBarButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SquareSharp, CopySharp } from 'pixelarticons/react';
@@ -8,6 +8,9 @@ import ItemSummary from './DataWindowComponents/ItemSummary';
 
 type Props = {
 	data: any;
+	table: TableType;
+	isMe: boolean;
+	id?: number;
 };
 
 const Close = ({ size = 24, color = 'currentColor' }) => (
@@ -19,23 +22,25 @@ const Close = ({ size = 24, color = 'currentColor' }) => (
 	</svg>
 );
 
-function DataWindow({ data }: Props) {
-	const { activeTable, expandedWindowId, setExpandedWindowId } = useTable();
+function DataWindow({ data, table, isMe, id }: Props) {
+	const { expandedWindowId, setExpandedWindowId } = useTable();
 	const [isAnimating, setIsAnimating] = useState(false);
 
-	const isExpanded: boolean = expandedWindowId == data.id;
+	const itemId = id || data.id;
+
+	const isExpanded: boolean = expandedWindowId == itemId;
 
 	const handleClickDetails = () => {
-		setExpandedWindowId(isExpanded ? null : data.id);
+		setExpandedWindowId(isExpanded ? null : itemId);
 	};
 	const closeDetals = () => {
 		setExpandedWindowId(null);
 	};
-
+	if (!data) return null;
 	return (
 		<div className='DataWindowHolder'>
 			<AnimatePresence>
-				{expandedWindowId == data.id && (
+				{isExpanded && (
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
@@ -60,17 +65,17 @@ function DataWindow({ data }: Props) {
 					{data.id}
 					<div className='ButtonContainer'>
 						<TopBarButton
-							icon={expandedWindowId == data.id ? CopySharp : SquareSharp}
-							text={expandedWindowId == data.id ? 'Minimize' : 'Details'}
+							icon={isExpanded ? CopySharp : SquareSharp}
+							text={isExpanded ? 'Minimize' : 'Details'}
 							onClick={handleClickDetails}
 						/>
 						<TopBarButton icon={Close} disabled />
 					</div>
 				</div>
 				{isExpanded ? (
-					<ItemDetails table={activeTable} itemId={data.id} />
+					<ItemDetails table={table} itemId={data.id} isMe={isMe} />
 				) : (
-					<ItemSummary table={activeTable} data={data} />
+					<ItemSummary table={table} data={data} />
 				)}
 			</motion.div>
 		</div>
