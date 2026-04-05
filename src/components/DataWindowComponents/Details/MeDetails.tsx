@@ -8,7 +8,7 @@ type Props = {
 		id: number;
 		username: string;
 		password: string | null;
-		token_duration_minutes: number;
+		access_token_duration_minutes: number;
 		role_id: number;
 		llm_prefix: string | null;
 		time_created: string;
@@ -60,9 +60,9 @@ function MeDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 				label='Password'
 			/>
 			<Input
-				name='token_duration_minutes'
+				name='access_token_duration_minutes'
 				type='number'
-				value={data.token_duration_minutes}
+				value={data.access_token_duration_minutes}
 				onChange={onFieldChange}
 				isEditing={isEditing && currentUser?.role_id == 1}
 				label='Token Duration'

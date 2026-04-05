@@ -6,7 +6,6 @@ import DetailsButtons from './DetailsButtons';
 import CommandsDetails from './Details/CommandsDetails';
 import SpritesDetails from './Details/spritesDetails';
 import MeDetails from './Details/MeDetails';
-import Cookies from 'cookies-js';
 
 type Props = {
 	table: TableType;
@@ -32,6 +31,7 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 		currentUser,
 		logout,
 		setCurrentUser,
+		setAuthCookies,
 	} = useTable();
 	const [data, setData] = useState<any>(null);
 	const [draft, setDraft] = useState<any>(null);
@@ -98,7 +98,12 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 	const handleMeSave = async () => {
 		const updatedItem = await updateItemById(table, null, draft);
 		if (updatedItem) {
-			Cookies.set('token', updatedItem.access_token);
+			setAuthCookies(
+				updatedItem.access_token,
+				updatedItem.access_token_duration_minutes,
+				updatedItem.refresh_token,
+				updatedItem.refresh_token_duration_days,
+			);
 			setData(draft);
 			setCurrentUser(draft);
 			setIsEditing(false);
@@ -122,7 +127,8 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 				isEditing={isEditing}
 				onSave={handleSave}
 			/>
-			{table == 'Roles' && (itemId == 1 || itemId == 2) ? null : (
+			{(table == 'Roles' && (itemId == 1 || itemId == 2)) ||
+			(currentUser?.role_id != 1 && table != 'Me') ? null : (
 				<DetailsButtons
 					isEditing={isEditing}
 					onSave={isMe ? handleMeSave : handleSave}

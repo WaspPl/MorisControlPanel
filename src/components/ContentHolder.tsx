@@ -1,61 +1,102 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTable } from '../context/TableContext';
 import DataWindow from './DataWindow';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import CreateWindow from './CreateWindow';
-import Button from './fields/Button';
 
 function ContentHolder() {
 	const { items, activeTable, getItems, setItems, currentUser } = useTable();
+	const [isMore, setIsMore] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const observerTarget = useRef(null);
 
-	const [isMore, setIsMore] = useState<boolean>(true);
 	useEffect(() => {
-		const fetchItems = async () => {
-			const limit = currentUser?.role_id == 1 ? 5 : 6;
+		let isMounted = true;
+		const fetchInitial = async () => {
+			setIsLoading(true);
+			const limit = currentUser?.role_id === 1 ? 5 : 6;
 			const fetched = await getItems(activeTable, limit);
-			setItems(fetched);
-		};
-		fetchItems();
-		setIsMore(true);
-	}, [activeTable]);
 
-	const loadMore = async () => {
-		const itemsVisible = (currentUser?.role_id == 1 ? 1 : 0) + items.length;
-		const recieved = await getItems(
+			if (isMounted) {
+				setItems(fetched);
+				setIsMore(fetched.length === limit);
+				setIsLoading(false);
+			}
+		};
+		fetchInitial();
+		return () => {
+			isMounted = false;
+		};
+	}, [activeTable, currentUser?.role_id]);
+
+	const loadMore = useCallback(async () => {
+		if (isLoading || !isMore) return;
+
+		setIsLoading(true);
+		const fetchLimit = 6;
+		const currentOffset = items.length;
+
+		const received = await getItems(
 			activeTable,
-			6 - (itemsVisible % 6),
-			items.length,
+			fetchLimit,
+			currentOffset,
 			true,
 		);
-		if (recieved.length == 0) {
+
+		if (received.length < fetchLimit) {
 			setIsMore(false);
 		}
-		setItems([...items, ...recieved]);
-	};
+		setItems([...items, ...received]);
+
+		setIsLoading(false);
+	}, [activeTable, items.length, isMore, isLoading, getItems, setItems]);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting && isMore && !isLoading) {
+					loadMore();
+				}
+			},
+			{
+				rootMargin: '200px',
+				threshold: 0.1,
+			},
+		);
+
+		if (observerTarget.current) {
+			observer.observe(observerTarget.current);
+		}
+
+		return () => observer.disconnect();
+	}, [loadMore, isMore, isLoading]);
 
 	return (
 		<div className='ContentHolder'>
 			<div className='ListWrapper'>
 				<div className='ListHolder' key={activeTable}>
 					<AnimatePresence mode='popLayout'>
-						{currentUser?.role_id == 1 && <CreateWindow id={-1} />}
-						{items.map((item: any) => (
+						{currentUser?.role_id === 1 && <CreateWindow id={-1} />}
+						{items?.map((item: any) => (
 							<motion.div
 								key={item.id}
 								layout
-								initial={{ scale: 0.5, opacity: 0 }}
+								initial={{ scale: 0.8, opacity: 0 }}
 								animate={{ scale: 1, opacity: 1 }}
-								exit={{ scale: 0.5, opacity: 0 }}
+								exit={{ scale: 0.8, opacity: 0 }}
 								transition={{ duration: 0.2 }}
-								style={{ height: 'fit-content' }}
 							>
 								<DataWindow data={item} table={activeTable} isMe={false} />
 							</motion.div>
 						))}
 					</AnimatePresence>
+
 					{isMore && (
-						<div className='LoadMore'>
-							<Button label='Load More' onClick={loadMore} variant='Success' />
+						<div
+							ref={observerTarget}
+							style={{ height: '40px', textAlign: 'center' }}
+						>
+							{isLoading && <span>Loading more items...</span>}
 						</div>
 					)}
 				</div>

@@ -59,12 +59,20 @@ interface TableContextType {
 	isLoading: boolean;
 	notifications: any;
 	removeNotification: (id: string) => void;
+	setAuthCookies: (
+		access_token: string,
+		access_token_duration_minutes: number,
+		refresh_token: string,
+		refresh_token_duration_days: number,
+	) => void;
+	setIsLoading: (value: boolean) => void;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
 
 export const TableProvider = ({ children }: { children: ReactNode }) => {
 	const navigate = useNavigate();
+
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoading, setIsLoading] = useState(true);
 	const [notifications, setNotifications] = useState<any[]>([]);
@@ -112,8 +120,69 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 	const setExpandedWindowId = (newId: number | null) =>
 		updateQueryParams({ expandedWindowId: newId?.toString() ?? null });
 	const API_BASE = 'http://localhost:8080';
+	const api = axios.create({
+		baseURL: API_BASE,
+	});
+	api.interceptors.request.use((config) => {
+		const token = Cookies.get('token');
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
+		return config;
+	});
+
+	api.interceptors.response.use(
+		(response) => response,
+		async (error) => {
+			const originalRequest = error.config;
+
+			if (error.response?.status === 401 && !originalRequest._retry) {
+				originalRequest._retry = true;
+				const refreshToken = Cookies.get('refresh_token');
+
+				if (!refreshToken) {
+					logout();
+				}
+
+				try {
+					const response = await axios.post(
+						`${API_BASE}/token/refresh?refresh_token=${refreshToken}`,
+					);
+
+					setAuthCookies(
+						response.data.access_token,
+						response.data.access_token_duration_minutes,
+						response.data.refresh_token,
+						response.data.refresh_token_duration_days,
+					);
+					originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
+					return api(originalRequest);
+				} catch (refreshError) {
+					console.log(refreshError);
+					logout();
+					return Promise.reject(refreshError);
+				}
+			}
+			return Promise.reject(error);
+		},
+	);
 
 	const [currentUser, setCurrentUser] = useState<any>(null);
+
+	const setAuthCookies = (
+		access_token: string,
+		access_token_duration_minutes: number,
+		refresh_token: string,
+		refresh_token_duration_days: number,
+	) => {
+		Cookies.set('token', access_token, {
+			expires: access_token_duration_minutes * 60,
+		});
+		Cookies.set('refresh_token', refresh_token, {
+			expires: refresh_token_duration_days * 24 * 60 * 60,
+			secure: true,
+		});
+	};
 
 	const login = async (username: string, password: string) => {
 		const formData = new URLSearchParams();
@@ -126,7 +195,12 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				},
 			});
 			if (response) {
-				Cookies.set('token', response.data.access_token);
+				setAuthCookies(
+					response.data.access_token,
+					response.data.access_token_duration_minutes,
+					response.data.refresh_token,
+					response.data.refresh_token_duration_days,
+				);
 				navigate('/panel');
 			}
 		} catch (error: any) {
@@ -138,8 +212,21 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		}
 	};
 
-	const logout = () => {
+	const logout = async () => {
+		const refreshToken = Cookies.get('refresh_token');
+
+		if (refreshToken) {
+			try {
+				await axios.post(
+					`${API_BASE}/token/logout?refresh_token=${refreshToken}`,
+				);
+			} catch (e) {
+				console.error('Token already revoked or expired');
+			}
+		}
+
 		Cookies.set('token', null);
+		Cookies.set('refresh_token', null);
 		setCurrentUser(null);
 		navigate('/login');
 	};
@@ -163,7 +250,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				offset: offset.toString(),
 				descending: descending.toString(),
 			}).toString();
-			const response = await axios.get(
+			const response = await api.get(
 				`${API_BASE}/${Routes[table]}?${params}`,
 				getAuthHeaders(),
 			);
@@ -171,11 +258,8 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			return response.data;
 		} catch (error: any) {
 			const status = error.response?.status;
-
-			if (status === 401) {
-				logout();
-			} else {
-				addNotification(status, error.response?.detail);
+			if (status != 401) {
+				addNotification(status, error.response?.data.detail);
 			}
 		}
 	};
@@ -185,22 +269,18 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			const path = id
 				? `${API_BASE}/${Routes[table]}/${id}`
 				: `${API_BASE}/${Routes[table]}`;
-			const response = await axios.get(path, getAuthHeaders());
+			const response = await api.get(path, getAuthHeaders());
 			return response.data;
 		} catch (error: any) {
 			const status = error.response?.status;
 
-			if (status === 401) {
-				logout();
-			} else {
-				addNotification(status, error.response?.detail);
-			}
+			addNotification(status, error.response?.data.detail);
 		}
 	};
 
 	const createItem = async (table: TableType, data: object) => {
 		try {
-			const response = await axios.post(
+			const response = await api.post(
 				`${API_BASE}/${Routes[table]}`,
 				data,
 				getAuthHeaders(),
@@ -210,14 +290,10 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		} catch (error: any) {
 			const status = error.response?.status;
 
-			if (status === 401) {
-				logout();
-			} else {
-				addNotification(
-					status || 500,
-					error.response?.data.detail || 'Oops, server had an issue with that',
-				);
-			}
+			addNotification(
+				status || 500,
+				error.response?.data.detail || 'Oops, server had an issue with that',
+			);
 		}
 	};
 
@@ -230,16 +306,12 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			const path = id
 				? `${API_BASE}/${Routes[table]}/${id}`
 				: `${API_BASE}/${Routes[table]}`;
-			const response = await axios.put(path, data, getAuthHeaders());
+			const response = await api.put(path, data, getAuthHeaders());
+			addNotification(response.status, 'Update successful');
 			return response.data;
 		} catch (error: any) {
 			const status = error.response?.status;
-
-			if (status === 401) {
-				logout();
-			} else {
-				// showErrorNotification("Failed to fetch items");
-			}
+			addNotification(status, error.response?.data.detail);
 		}
 	};
 
@@ -248,21 +320,17 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 			const path = id
 				? `${API_BASE}/${Routes[table]}/${id}`
 				: `${API_BASE}/${Routes[table]}`;
-			await axios.delete(path, getAuthHeaders());
-			return { status: 'ok' };
+			const response = await api.delete(path, getAuthHeaders());
+			addNotification(response.status, 'Delete successful');
+			return true;
 		} catch (error: any) {
 			const status = error.response?.status;
-
-			if (status === 401) {
-				logout();
-			} else {
-				// showErrorNotification("Failed to fetch items");
-			}
+			addNotification(status, error.response?.data.detail);
 		}
 	};
 	const getScript = async (commandId: number) => {
 		try {
-			const file = await axios.get(
+			const file = await api.get(
 				`${API_BASE}/${Routes['Commands']}/${commandId}/script`,
 				{
 					...getAuthHeaders(),
@@ -273,36 +341,22 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		} catch (error: any) {
 			const status = error.response?.status;
 
-			if (status === 401) {
-				logout();
-			} else {
-				// showErrorNotification("Failed to fetch items");
-			}
+			addNotification(status, error.response?.data.detail);
 		}
 	};
 	const createScript = async (commandId: number, script: File) => {
 		try {
 			const formData = new FormData();
 			formData.append('file', script);
-			const file = await axios.put(
+			const file = await api.put(
 				`${API_BASE}/${Routes['Commands']}/${commandId}/script`,
 				formData,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data',
-						Authorization: `Bearer ${Cookies.get('token')}`,
-					},
-				},
 			);
+			addNotification(file.status, 'Upload succesful');
 			return file;
 		} catch (error: any) {
 			const status = error.response?.status;
-
-			if (status === 401) {
-				logout();
-			} else {
-				// showErrorNotification("Failed to fetch items");
-			}
+			addNotification(status, error.response?.data.detail);
 		}
 	};
 	const valuesToExport = {
@@ -329,6 +383,8 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		isLoading,
 		notifications,
 		removeNotification,
+		setAuthCookies,
+		setIsLoading,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>
