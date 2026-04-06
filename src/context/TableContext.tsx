@@ -243,12 +243,14 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		limit: number = 5,
 		offset: number = 0,
 		descending: boolean = true,
+		searchQuery: string = '',
 	) => {
 		try {
 			const params = new URLSearchParams({
 				limit: limit.toString(),
 				offset: offset.toString(),
 				descending: descending.toString(),
+				searchQuery: searchQuery,
 			}).toString();
 			const response = await api.get(
 				`${API_BASE}/${Routes[table]}?${params}`,
