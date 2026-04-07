@@ -39,7 +39,7 @@ function PromptList({
 		if (onRemove) onRemove(id);
 	};
 	return (
-		<form className='RoleList' onSubmit={handleSend}>
+		<form className='input' onSubmit={handleSend}>
 			<Input
 				name={name}
 				type='text'

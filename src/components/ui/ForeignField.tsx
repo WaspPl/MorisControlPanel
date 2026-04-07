@@ -20,9 +20,9 @@ function ForeignField({ name, item, foreignItemTable, label }: Props) {
 		}
 	};
 	return (
-		<div className='Input'>
+		<div className='input'>
 			{label && <label htmlFor={name}>{label}</label>}
-			<button id={name} onClick={handleClick}>
+			<button id={name} onClick={handleClick} className='input-field'>
 				{item ? item.name : 'Unassigned'}
 			</button>
 		</div>

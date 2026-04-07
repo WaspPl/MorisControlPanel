@@ -72,36 +72,39 @@ function ContentHolder() {
 	}, [loadMore, isMore, isLoading]);
 
 	return (
-		<div className='ContentHolder'>
-			<div className='ListWrapper'>
-				<div className='ListHolder' key={activeTable}>
-					<AnimatePresence mode='popLayout'>
-						{currentUser?.role_id === 1 && <CreateWindow id={-1} />}
-						{items?.map((item: any) => (
-							<motion.div
-								key={item.id}
-								layout
-								initial={{ scale: 0.8, opacity: 0 }}
-								animate={{ scale: 1, opacity: 1 }}
-								exit={{ scale: 0.8, opacity: 0 }}
-								transition={{ duration: 0.2 }}
-							>
-								<DataWindow data={item} table={activeTable} isMe={false} />
-							</motion.div>
-						))}
-					</AnimatePresence>
+		<div className='main'>
+			<div className='main-list-border'>
+				<div className='main-list'>
+					<div className='main-list-grid'>
+						<AnimatePresence mode='popLayout'>
+							{currentUser?.role_id === 1 && <CreateWindow id={-1} />}
+							{items?.map((item: any) => (
+								<motion.div
+									className='motion-div'
+									key={item.id}
+									layout
+									initial={{ scale: 0.8, opacity: 0 }}
+									animate={{ scale: 1, opacity: 1 }}
+									exit={{ scale: 0.8, opacity: 0 }}
+									transition={{ duration: 0.2 }}
+								>
+									<DataWindow data={item} table={activeTable} isMe={false} />
+								</motion.div>
+							))}
+						</AnimatePresence>
 
-					{isMore && (
-						<div
-							ref={observerTarget}
-							style={{ height: '40px', textAlign: 'center' }}
-						>
-							{isLoading && <span>Loading more items...</span>}
-						</div>
-					)}
+						{isMore && (
+							<div
+								ref={observerTarget}
+								style={{ height: '40px', textAlign: 'center' }}
+							>
+								{isLoading && <span>Loading more items...</span>}
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
-			<div className='MeWindow'>
+			<div className='moved-away'>
 				<DataWindow data={currentUser} table='Me' isMe={true} id={-2} />
 			</div>
 		</div>

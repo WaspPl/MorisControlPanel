@@ -52,7 +52,7 @@ function RoleList({
 		if (onRemove) onRemove(id);
 	};
 	return (
-		<form className='RoleList' onSubmit={handleSend}>
+		<form className='input' onSubmit={handleSend}>
 			<Dropdown
 				name={name}
 				value={value}

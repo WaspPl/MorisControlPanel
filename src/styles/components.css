@@ -10,13 +10,6 @@
 	box-sizing: border-box;
 }
 
-.BottomPart {
-	width: 100%;
-	height: calc(100% - var(--TopBarHeight));
-	display: flex;
-	flex-direction: row;
-}
-
 .Sidebar {
 	width: var(--IconHolderWidth);
 	height: calc(100% - var(--TopBarHeight));
@@ -85,7 +78,7 @@
 	transition: color 0.1s ease-in-out;
 }
 
-.ContentHolder {
+/* .ContentHolder {
 	box-sizing: border-box;
 	margin-left: var(--IconHolderWidth);
 	height: 100%;
@@ -93,7 +86,7 @@
 	background-color: #cff;
 	padding: 30px;
 	overflow: hidden;
-}
+} */
 
 .DescriptionHolder h2,
 .DescriptionHolder p {
@@ -112,7 +105,6 @@ p {
 	height: 300px;
 	background-color: aqua;
 	position: relative;
-	z-index: 5;
 	border: solid black 1px;
 	overflow: hidden;
 }
@@ -145,7 +137,7 @@ p {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	z-index: 100;
+	z-index: 9;
 	background-color: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(2px);
 }
@@ -244,7 +236,7 @@ p {
 	justify-content: center;
 	align-items: center;
 }
-
+/* 
 .ListWrapper {
 	background: #eff;
 	border-radius: 40px;
@@ -263,14 +255,7 @@ p {
 	justify-items: center;
 	overflow-x: visible;
 	overflow-y: overlay;
-}
-.LoadMore {
-	grid-column: 1 / -1;
-	padding: 20px 0;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-}
+} */
 
 .MeWindow {
 	position: relative;

@@ -12,9 +12,10 @@ type Props = {
 
 function Dropdown({ name, value, isEditing, choices, label, onChange }: Props) {
 	return (
-		<div className='Dropdown'>
+		<div className='input'>
 			{label && <label htmlFor={name}>{label}</label>}
 			<select
+				className='input-field'
 				name={name}
 				id={name}
 				value={value || ''}

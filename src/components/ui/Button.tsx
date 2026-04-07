@@ -7,11 +7,18 @@ type Props = {
 	onClick?: (event: any) => void;
 	variant?: Variant;
 	type?: ButtonType;
+	className?: string;
 };
 
-function Button({ label, onClick, variant = 'Success', type }: Props) {
+function Button({
+	label,
+	onClick,
+	variant = 'Success',
+	type,
+	className,
+}: Props) {
 	return (
-		<button onClick={onClick} className={variant} type={type}>
+		<button onClick={onClick} className={`${variant} ${className}`} type={type}>
 			{label}
 		</button>
 	);

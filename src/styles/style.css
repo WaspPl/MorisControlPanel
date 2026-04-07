@@ -1,20 +1,258 @@
+:root {
+	--navHeight: 2rem;
+	--asideMainWidth: 7rem;
+	--asideDescWidth: 10rem;
+
+	--dataWindowWidth: 18rem;
+
+	/* colors */
+	--blue: rgb(141, 181, 173);
+	--beige: rgb(255, 240, 225);
+	--beige-dark: rgb(243, 226, 209);
+	--orange: rgb(236, 175, 119);
+}
+
 *,
 *::before,
 *::after {
 	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
-.App {
-	width: 100vw;
-	height: 100vh;
+body {
+	margin: 0px;
+	width: 100%;
+	height: 100%;
+	font-family: 'Press Start 2P', system-ui, cursive;
+	line-height: 1.5;
+	overflow: hidden;
+	font-size: small;
+}
+.app {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-areas:
+		'navbar navbar'
+		'sidebar main';
+	grid-template-columns: auto 1fr;
+	grid-template-rows: var(--navHeight) 1fr;
+}
+
+.nav {
+	grid-area: navbar;
+	z-index: 3;
+	position: sticky;
+	top: 0;
+	background-color: var(--blue);
+	overflow: hidden;
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 2px black solid;
+}
+
+/* #region nav-elements */
+
+/* #endregion nav-elements */
+.aside {
+	grid-area: sidebar;
+	position: sticky;
+	align-self: start;
+	top: var(--navHeight);
+	height: calc(100vh - var(--navHeight));
+	width: var(--asideMainWidth);
+}
+/* #region aside-elements */
+.aside-main {
+	background: var(--beige-dark);
+	z-index: 2;
+	width: var(--asideMainWidth);
+	height: 100%;
+	display: flex;
+	align-items: end;
+	justify-content: space-evenly;
+	flex-shrink: 0;
+	flex-direction: column;
+	position: absolute;
+	left: 0;
+}
+.aside-desc {
+	z-index: 1;
+	width: var(--asideDescWidth);
+	height: 100%;
+	background: burlywood;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	white-space: pre-line;
+	position: absolute;
+	left: var(--asideMainWidth);
+	transform: translateX(-100%);
+	transition: transform 0.3s ease;
+	pointer-events: none;
+}
+
+.aside:has(.aside-button:hover) .aside-desc {
+	transform: translateX(0);
+	pointer-events: auto;
+}
+.aside-toggle {
+	display: none;
+	aspect-ratio: 1/1;
+	height: 32px;
+	z-index: 3;
+}
+.aside-toggle button svg {
+	transition: transform 0.2s;
+	transform: rotate(90deg);
+}
+.aside-toggle.active button svg {
+	transform: rotate(-90deg);
+}
+
+.aside-button {
+	position: relative;
+	right: 0;
+	width: 75px;
+	aspect-ratio: 1/1;
+	margin: 5px;
+	padding-left: 15px;
+	margin-right: 0px;
+	border-radius: 10px;
+	corner-shape: notch square square notch;
+	border: solid 4px;
+	border-right: 0px;
+	bottom: 0;
+	box-shadow: none;
+	transition:
+		transform 0.2s,
+		box-shadow 0.2s;
+}
+.aside-button:hover {
+	transform: translateY(-8px);
+	box-shadow: white 0px 8px;
+}
+.aside-button:active {
+	transform: translateY(-2px);
+	box-shadow: white 0px 2px;
+}
+
+/* #endregion aside-elements */
+.main {
+	grid-area: main;
+	padding: 2%;
+	height: calc(100vh - var(--navHeight));
+	background: var(--beige);
+}
+/* #region main-elements */
+.main-list-border {
+	/* This is here to round up the scroll bar*/
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	border-radius: 30px;
+}
+.main-list {
+	padding: 30px;
+	overflow-y: scroll;
+	height: 100%;
+	scrollbar-color: var(--orange) trasparent;
+	background: rgb(181, 255, 239);
+}
+.main-list-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--dataWindowWidth), 1fr));
+	gap: 15px;
+	justify-items: center;
+}
+.moved-away {
+	position: relative;
+	top: 100vh;
+}
+
+.data-window-holder {
+	width: var(--dataWindowWidth);
+}
+.data-window {
+	width: 100%;
+	background: lightcyan;
+	border-radius: 5px;
+	overflow: hidden;
+	border: 2px black solid;
 	display: flex;
 	flex-direction: column;
 }
+.data-window-top-bar {
+	display: flex;
+	justify-content: space-between;
+	padding: 2px;
+	background: var(--blue);
+	border-bottom: solid black 2px;
+}
+.buttons {
+	display: flex;
+	flex-direction: row;
+}
+.data-window-content {
+	padding: 10px;
+	background: var(--beige);
+	height: 100%;
+}
+.data-window.big {
+	position: fixed;
+	top: 10%;
+	left: 10%;
+	width: 80vw;
+	height: 80vh;
+	aspect-ratio: auto;
+	z-index: 11;
+	box-shadow: 0 0 50px rgba(0, 0, 0, 0.4);
+}
 
-body {
-	margin: 0px;
-	width: 100vw;
-	height: 100vh;
-	font-family: 'Press Start 2P', system-ui, cursive;
-	font-size: 14px;
-	line-height: 1.5;
+.data-window.create:not(.big) {
+	height: 100%;
+	padding: 0px;
+}
+.create-content {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+/* #endregion main-elements */
+
+/* #region ui */
+.input {
+	display: flex;
+	flex-direction: column;
+	font-size: x-small;
+	margin-bottom: 1rem;
+}
+.input-field {
+	background: transparent;
+	border: solid black 1px;
+	text-align: start;
+	padding: 0.25rem;
+}
+button.input-field {
+	background: var(--beige-dark);
+	border-bottom: outset 5px var(--beige-dark);
+}
+/* #endregion ui */
+@media (max-width: 440px) {
+	.app {
+		grid-template-columns: 1fr;
+	}
+	.aside {
+		position: fixed;
+		display: none;
+	}
+	.aside.active {
+		display: block;
+	}
+	.aside-toggle {
+		display: block;
+	}
 }

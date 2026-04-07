@@ -16,9 +16,10 @@ function Toggle({
 	onChange,
 }: Props) {
 	return (
-		<div className='Toggle'>
+		<div className='input'>
 			{label && <label htmlFor={name}>{label}</label>}
 			<input
+				className='input-field'
 				name={name}
 				id={name}
 				type='checkbox'

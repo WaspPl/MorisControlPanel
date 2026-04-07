@@ -4,7 +4,7 @@ import Logo from '../common/Logo';
 import TopBarButton from '../ui/TopBarButton';
 import { UserSharp } from 'pixelarticons/react';
 
-function TitleBar() {
+function Nav() {
 	const { activeTable, logout, setExpandedWindowId } = useTable();
 	const handleUserClick = () => {
 		setExpandedWindowId(-2);
@@ -15,7 +15,7 @@ function TitleBar() {
 	};
 
 	return (
-		<div className='TitleBar'>
+		<div className='nav'>
 			<div className='LogoContainer'>
 				<Logo />
 				Moris Control Panel - {activeTable}
@@ -33,4 +33,4 @@ function TitleBar() {
 	);
 }
 
-export default TitleBar;
+export default Nav;

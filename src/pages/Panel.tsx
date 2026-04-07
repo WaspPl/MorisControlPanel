@@ -4,7 +4,7 @@ import '../styles/style.css';
 import Sidebar from '../components/layout/Sidebar';
 import ContentHolder from '../components/layout/ContentHolder';
 import { useTable } from '../context/TableContext';
-import TitleBar from '../components/common/TitleBar';
+import Nav from '../components/layout/Nav';
 
 function Panel() {
 	const { setDefaultParams, setCurrentUser, getItems, isLoading } = useTable();
@@ -18,12 +18,10 @@ function Panel() {
 
 	if (isLoading) return <p>loading...</p>;
 	return (
-		<div className='App'>
-			<TitleBar />
-			<div className='BottomPart'>
-				<Sidebar />
-				<ContentHolder />
-			</div>
+		<div className='app'>
+			<Nav />
+			<ContentHolder />
+			<Sidebar />
 		</div>
 	);
 }

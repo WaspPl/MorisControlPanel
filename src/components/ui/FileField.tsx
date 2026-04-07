@@ -31,7 +31,7 @@ function FileField({ name, onDownload, onUpload, isEditing, label }: Props) {
 	};
 
 	return (
-		<div>
+		<div className='input'>
 			<label htmlFor={name + 'div'}>{label}</label>
 			<div id={name + 'div'}>
 				{isEditing && (
@@ -44,6 +44,7 @@ function FileField({ name, onDownload, onUpload, isEditing, label }: Props) {
 					/>
 				)}
 				<Button
+					className='input-field'
 					label={isEditing ? 'Upload' : 'Download'}
 					onClick={isEditing ? handleUpload : handleDownload}
 				/>

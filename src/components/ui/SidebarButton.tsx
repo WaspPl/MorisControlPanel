@@ -24,15 +24,13 @@ function SidebarButton({
 	};
 
 	return (
-		<div className='SidebarButtonWrapper'>
-			<button
-				className='SidebarButton'
-				onClick={handleClick}
-				onMouseOver={handleHover}
-			>
-				<Icon width={48} height={48} />
-			</button>
-		</div>
+		<button
+			onClick={handleClick}
+			onMouseOver={handleHover}
+			className='aside-button'
+		>
+			<Icon width={48} height={48} />
+		</button>
 	);
 }
 

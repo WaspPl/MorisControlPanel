@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTable, type TableType } from '../../context/TableContext';
 import TopBarButton from '../ui/TopBarButton';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { SquareSharp, CopySharp } from 'pixelarticons/react';
 import ItemDetails from '../../features/universal/ItemDetails';
 import ItemSummary from '../../features/universal/ItemSummary';
 import { Close } from '../../assets/icons/pixelIcons';
+import BackgroundBlur from '../common/BackgroundBlur';
 
 type Props = {
 	data: any;
@@ -30,18 +31,8 @@ function DataWindow({ data, table, isMe, id }: Props) {
 	};
 	if (!data) return null;
 	return (
-		<div className='DataWindowHolder'>
-			<AnimatePresence>
-				{isExpanded && (
-					<motion.div
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						className='BackgroundBlur'
-						onClick={closeDetals}
-					/>
-				)}
-			</AnimatePresence>
+		<div className='data-window-holder'>
+			<BackgroundBlur active={isExpanded} onClick={closeDetals} />
 			<motion.div
 				onLayoutAnimationStart={() => {
 					setIsAnimating(true);
@@ -51,11 +42,11 @@ function DataWindow({ data, table, isMe, id }: Props) {
 				}}
 				layout
 				transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-				className={`DataWindow ${isExpanded ? 'BigDataWindow' : ''} ${isAnimating ? 'Animating' : ''}`}
+				className={`data-window ${isExpanded ? 'big' : ''} ${isAnimating ? 'animating' : ''}`}
 			>
-				<div className='DataWindowTopBar'>
+				<div className='data-window-top-bar'>
 					{data.id}
-					<div className='ButtonContainer'>
+					<div className='buttons'>
 						<TopBarButton
 							icon={isExpanded ? CopySharp : SquareSharp}
 							text={isExpanded ? 'Minimize' : 'Details'}
@@ -64,11 +55,13 @@ function DataWindow({ data, table, isMe, id }: Props) {
 						<TopBarButton icon={Close} disabled />
 					</div>
 				</div>
-				{isExpanded ? (
-					<ItemDetails table={table} itemId={data.id} isMe={isMe} />
-				) : (
-					<ItemSummary table={table} data={data} />
-				)}
+				<div className='data-window-content'>
+					{isExpanded ? (
+						<ItemDetails table={table} itemId={data.id} isMe={isMe} />
+					) : (
+						<ItemSummary table={table} data={data} />
+					)}
+				</div>
 			</motion.div>
 		</div>
 	);

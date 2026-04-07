@@ -31,7 +31,7 @@ function Image({ name, srcBase64, onChange, isEditing, label }: Props) {
 	};
 
 	return (
-		<div>
+		<div className='input'>
 			{label && <label htmlFor={name}>{label}</label>}
 			<div
 				id={name}

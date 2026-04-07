@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useTable } from '../../context/TableContext';
 import TopBarButton from '../ui/TopBarButton';
-import { motion, AnimatePresence } from 'framer-motion';
-import { SquareSharp, CopySharp } from 'pixelarticons/react';
+import { motion } from 'framer-motion';
+import { SquareSharp, CopySharp, Plus } from 'pixelarticons/react';
 import ItemCreate from '../../features/universal/ItemCreate';
 import { Close } from '../../assets/icons/pixelIcons';
+import BackgroundBlur from '../common/BackgroundBlur';
 
 type Props = {
 	id: number;
@@ -24,18 +25,8 @@ function CreateWindow({ id }: Props) {
 	};
 
 	return (
-		<div className='DataWindowHolder'>
-			<AnimatePresence>
-				{expandedWindowId == id && (
-					<motion.div
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						className='BackgroundBlur'
-						onClick={closeDetals}
-					/>
-				)}
-			</AnimatePresence>
+		<div className='data-window-holder'>
+			<BackgroundBlur active={isExpanded} onClick={closeDetals} />
 			<motion.div
 				onLayoutAnimationStart={() => {
 					setIsAnimating(true);
@@ -45,11 +36,11 @@ function CreateWindow({ id }: Props) {
 				}}
 				layout
 				transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-				className={`CreateWindow DataWindow ${isExpanded ? 'BigDataWindow' : ''} ${isAnimating ? 'Animating' : ''}`}
+				className={`data-window create ${isExpanded ? 'big' : ''} ${isAnimating ? 'animating' : ''}`}
 			>
-				<div className='DataWindowTopBar'>
+				<div className='data-window-top-bar'>
 					Create
-					<div className='ButtonContainer'>
+					<div className='buttons'>
 						<TopBarButton
 							icon={isExpanded ? CopySharp : SquareSharp}
 							text={isExpanded ? 'Minimize' : 'Details'}
@@ -58,7 +49,15 @@ function CreateWindow({ id }: Props) {
 						<TopBarButton icon={Close} disabled />
 					</div>
 				</div>
-				{isExpanded ? <ItemCreate table={activeTable} /> : <p>+</p>}
+				<div className='data-window-content'>
+					{isExpanded ? (
+						<ItemCreate table={activeTable} />
+					) : (
+						<div className='create-content' onClick={handleClickDetails}>
+							<Plus height={64} width={64} />
+						</div>
+					)}
+				</div>
 			</motion.div>
 		</div>
 	);

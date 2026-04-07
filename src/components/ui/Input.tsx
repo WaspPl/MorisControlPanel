@@ -18,9 +18,10 @@ function Input({
 	onChange,
 }: Props) {
 	return (
-		<div className='Input'>
+		<div className='input'>
 			{label && <label htmlFor={name}>{label}</label>}
 			<input
+				className='input-field'
 				name={name}
 				id={name}
 				type={type}
