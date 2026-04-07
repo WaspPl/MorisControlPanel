@@ -1,13 +1,9 @@
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
 import { TableProvider } from './context/TableContext.tsx';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
-import Login from './Login.tsx';
-import NotificationHolder from './components/NotificationHolder.tsx';
-
-function Panel() {
-	return <App />;
-}
+import Login from './pages/Login.tsx';
+import NotificationHolder from './components/layout/NotificationHolder.tsx';
+import Panel from './pages/Panel.tsx';
 
 createRoot(document.getElementById('root')!).render(
 	<BrowserRouter>

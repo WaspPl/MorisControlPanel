@@ -1,0 +1,60 @@
+import Image from '../../components/ui/Image';
+import Input from '../../components/ui/Input';
+type Props = {
+	data: {
+		id: number;
+		name: string;
+		content: string;
+		time_created: string;
+		time_updated: string;
+	};
+	onFieldChange: () => void;
+	isEditing: boolean;
+	onSave: () => void;
+};
+
+function SpritesDetails({ data, onFieldChange, isEditing, onSave }: Props) {
+	if (!data) return null;
+	return (
+		<form onSubmit={onSave}>
+			<Input
+				name='id'
+				type='number'
+				value={data.id}
+				isEditing={false}
+				label='Id'
+			/>
+			<Input
+				name='name'
+				type='text'
+				value={data.name}
+				onChange={onFieldChange}
+				isEditing={isEditing}
+				label='Name'
+			/>
+			<Image
+				name='content'
+				srcBase64={data.content}
+				onChange={onFieldChange}
+				isEditing={isEditing}
+				label='Sprite'
+			/>
+			<Input
+				name='time_updated'
+				type='datetime-local'
+				value={data?.time_updated.replace('T', ' ')}
+				isEditing={false}
+				label='Updated at'
+			/>
+			<Input
+				name='time_created'
+				type='datetime-local'
+				value={data?.time_created.replace('T', ' ')}
+				isEditing={false}
+				label='Created at'
+			/>
+		</form>
+	);
+}
+
+export default SpritesDetails;
