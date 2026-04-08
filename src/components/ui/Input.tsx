@@ -6,6 +6,7 @@ type Props = {
 	placeholder?: string;
 	label?: string;
 	onChange?: (newValue: any, name: string) => void;
+	className?: string;
 };
 
 function Input({
@@ -16,12 +17,13 @@ function Input({
 	placeholder,
 	label,
 	onChange,
+	className,
 }: Props) {
 	return (
 		<div className='input'>
 			{label && <label htmlFor={name}>{label}</label>}
 			<input
-				className='input-field'
+				className={`input-field ${className}`}
 				name={name}
 				id={name}
 				type={type}

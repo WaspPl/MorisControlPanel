@@ -4,6 +4,7 @@
 	--asideDescWidth: 10rem;
 
 	--dataWindowWidth: 18rem;
+	--dataWindowColumnWidth: 10rem;
 
 	/* colors */
 	--blue: rgb(141, 181, 173);
@@ -44,7 +45,7 @@ body {
 	z-index: 3;
 	position: sticky;
 	top: 0;
-	background-color: var(--blue);
+	background-color: lightblue;
 	overflow: hidden;
 	display: flex;
 	justify-content: space-between;
@@ -64,7 +65,7 @@ body {
 }
 /* #region aside-elements */
 .aside-main {
-	background: var(--beige-dark);
+	background: blueviolet;
 	z-index: 2;
 	width: var(--asideMainWidth);
 	height: 100%;
@@ -143,7 +144,6 @@ body {
 	grid-area: main;
 	padding: 2%;
 	height: calc(100vh - var(--navHeight));
-	background: var(--beige);
 }
 /* #region main-elements */
 .main-list-border {
@@ -176,7 +176,6 @@ body {
 }
 .data-window {
 	width: 100%;
-	background: lightcyan;
 	border-radius: 5px;
 	overflow: hidden;
 	border: 2px black solid;
@@ -198,6 +197,7 @@ body {
 	padding: 10px;
 	background: var(--beige);
 	height: 100%;
+	overflow-y: scroll;
 }
 .data-window.big {
 	position: fixed;
@@ -221,6 +221,29 @@ body {
 	justify-content: center;
 	align-items: center;
 }
+.details-form {
+	display: contents;
+}
+.details-feature {
+	display: grid;
+	height: 100%;
+	grid-template-rows: 1fr auto;
+}
+.details-contents {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+.details-buttons {
+	min-width: 100%;
+}
+.details-column {
+	flex: 1 1 0px;
+	padding: 5px;
+	border-right: var(--beige-dark) 4px solid;
+	border-bottom: var(--beige-dark) 4px solid;
+}
+
 /* #endregion main-elements */
 
 /* #region ui */
@@ -235,10 +258,14 @@ body {
 	border: solid black 1px;
 	text-align: start;
 	padding: 0.25rem;
+	width: 100%;
 }
 button.input-field {
 	background: var(--beige-dark);
 	border-bottom: outset 5px var(--beige-dark);
+}
+button.input-field:hover {
+	background: transparent;
 }
 /* #endregion ui */
 @media (max-width: 440px) {

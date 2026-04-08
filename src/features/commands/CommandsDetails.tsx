@@ -114,61 +114,67 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 	};
 	return (
 		<>
-			<form onSubmit={onSave}>
-				<Input
-					name='id'
-					type='number'
-					value={data.id}
-					isEditing={false}
-					label='Id'
-				/>
-				<Input
-					name='name'
-					type='text'
-					value={data.name}
-					onChange={onFieldChange}
-					isEditing={isEditing}
-					label='Name'
-				/>
-				<Input
-					name='description'
-					type='text'
-					value={data.description}
-					onChange={onFieldChange}
-					isEditing={isEditing}
-					label='Description'
-				/>
-				<Dropdown
-					name='sprite_id'
-					value={data.sprite_id}
-					isEditing={isEditing}
-					choices={sprites}
-					onChange={onFieldChange}
-					label='Sprite'
-				/>
-				<Input
-					name='sprite_repeat_times'
-					type='number'
-					value={data.sprite_repeat_times}
-					onChange={onFieldChange}
-					isEditing={isEditing}
-					label='Sprite Repeats'
-				/>
-				<Toggle
-					name='is_output_llm'
-					value={data.is_output_llm}
-					isEditing={isEditing}
-					label='LLM Output'
-					onChange={onFieldChange}
-				/>
-				<Input
-					name='llm_prefix'
-					type='text'
-					value={data.llm_prefix || ''}
-					onChange={onFieldChange}
-					isEditing={isEditing}
-					label='LLM Prefix'
-				/>
+			<form onSubmit={onSave} className='details-form'>
+				<div className='details-column'>
+					<Input
+						name='id'
+						type='number'
+						value={data.id}
+						isEditing={false}
+						label='Id'
+					/>
+					<Input
+						name='name'
+						type='text'
+						value={data.name}
+						onChange={onFieldChange}
+						isEditing={isEditing}
+						label='Name'
+					/>
+					<Input
+						name='description'
+						type='text'
+						value={data.description}
+						onChange={onFieldChange}
+						isEditing={isEditing}
+						label='Description'
+					/>
+				</div>
+				<div className='details-column'>
+					<Dropdown
+						name='sprite_id'
+						value={data.sprite_id}
+						isEditing={isEditing}
+						choices={sprites}
+						onChange={onFieldChange}
+						label='Sprite'
+					/>
+					<Input
+						name='sprite_repeat_times'
+						type='number'
+						value={data.sprite_repeat_times}
+						onChange={onFieldChange}
+						isEditing={isEditing}
+						label='Sprite Repeats'
+					/>
+					<Toggle
+						name='is_output_llm'
+						value={data.is_output_llm}
+						isEditing={isEditing}
+						label='LLM Output'
+						onChange={onFieldChange}
+					/>
+					<Input
+						name='llm_prefix'
+						type='text'
+						value={data.llm_prefix || ''}
+						onChange={onFieldChange}
+						isEditing={isEditing}
+						label='LLM Prefix'
+					/>
+				</div>
+			</form>
+			<div className='details-column'>
 				<Input
 					name='time_updated'
 					type='datetime-local'
@@ -183,38 +189,41 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 					isEditing={false}
 					label='Created at'
 				/>
-			</form>
-			<FileField
-				name='script'
-				label='Script '
-				isEditing={isEditing}
-				onUpload={handleScriptUpload}
-				onDownload={handleScriptDownload}
-			/>
-			<RoleList
-				name='assignments'
-				value={assignmentInput}
-				choices={roles}
-				values={assignments}
-				isEditing={true}
-				onChange={(value) => {
-					setAssignmentInput(value);
-				}}
-				onSend={addAssignment}
-				onRemove={removeAssignment}
-			/>
-			<PromptList
-				name='prompts'
-				value={promptInput}
-				isEditing={true}
-				values={prompts}
-				label='Prompts'
-				onChange={(value) => {
-					setPromptInput(value);
-				}}
-				onSend={addPrompt}
-				onRemove={removePrompt}
-			/>
+				<FileField
+					name='script'
+					label='Script '
+					isEditing={isEditing}
+					onUpload={handleScriptUpload}
+					onDownload={handleScriptDownload}
+				/>
+			</div>
+			<div className='details-column'>
+				<RoleList
+					name='assignments'
+					value={assignmentInput}
+					label='Roles'
+					choices={roles}
+					values={assignments}
+					isEditing={true}
+					onChange={(value) => {
+						setAssignmentInput(value);
+					}}
+					onSend={addAssignment}
+					onRemove={removeAssignment}
+				/>
+				<PromptList
+					name='prompts'
+					value={promptInput}
+					isEditing={true}
+					values={prompts}
+					label='Prompts'
+					onChange={(value) => {
+						setPromptInput(value);
+					}}
+					onSend={addPrompt}
+					onRemove={removePrompt}
+				/>
+			</div>
 		</>
 	);
 }

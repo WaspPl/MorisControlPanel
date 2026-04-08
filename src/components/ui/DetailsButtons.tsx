@@ -16,7 +16,7 @@ function DetailsButtons({
 	onCancel,
 }: Props) {
 	return (
-		<div className='ButtonHolder'>
+		<div className='details-buttons'>
 			{isEditing ? (
 				<>
 					<Button

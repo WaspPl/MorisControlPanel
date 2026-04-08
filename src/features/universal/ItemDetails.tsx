@@ -120,13 +120,15 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 		return <div>Table type not found</div>;
 	}
 	return (
-		<div>
-			<ComponentToRender
-				data={draft}
-				onFieldChange={handleFieldChange}
-				isEditing={isEditing}
-				onSave={handleSave}
-			/>
+		<div className='details-feature'>
+			<div className='details-contents'>
+				<ComponentToRender
+					data={draft}
+					onFieldChange={handleFieldChange}
+					isEditing={isEditing}
+					onSave={handleSave}
+				/>
+			</div>
 			{(table == 'Roles' && (itemId == 1 || itemId == 2)) ||
 			(currentUser?.role_id != 1 && table != 'Me') ? null : (
 				<DetailsButtons
