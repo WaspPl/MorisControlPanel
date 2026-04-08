@@ -197,7 +197,7 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 					onDownload={handleScriptDownload}
 				/>
 			</div>
-			<div className='details-column'>
+			<div className='details-column list-column'>
 				<RoleList
 					name='assignments'
 					value={assignmentInput}

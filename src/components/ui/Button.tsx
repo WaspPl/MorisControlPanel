@@ -1,24 +1,31 @@
-type Variant = 'Success' | 'Danger' | 'Warning' | 'Primary' | 'Secondary';
+type Variant = 'success' | 'danger' | 'warning' | 'primary' | 'secondary';
 
 type ButtonType = 'submit' | 'reset' | 'button' | undefined;
 
 type Props = {
-	label: string;
+	label: React.ReactNode;
 	onClick?: (event: any) => void;
 	variant?: Variant;
 	type?: ButtonType;
 	className?: string;
+	id?: string;
 };
 
 function Button({
 	label,
 	onClick,
-	variant = 'Success',
+	variant = 'primary',
 	type,
 	className,
+	id,
 }: Props) {
 	return (
-		<button onClick={onClick} className={`${variant} ${className}`} type={type}>
+		<button
+			id={id}
+			onClick={onClick}
+			className={`input-field ${variant} ${className}`}
+			type={type}
+		>
 			{label}
 		</button>
 	);

@@ -1,5 +1,6 @@
 import Dropdown from './Dropdown';
 import Button from './Button';
+import { Close } from '../../assets/icons/pixelIcons';
 
 type Props = {
 	name: string;
@@ -53,27 +54,31 @@ function RoleList({
 	};
 	return (
 		<form className='input' onSubmit={handleSend}>
-			<Dropdown
-				name={name}
-				value={value}
-				isEditing={isEditing}
-				choices={choicesFiltered}
-				label={label}
-				onChange={handleChange}
-			/>
-			<Button label='Add' type='submit' />
-			<div>
-				{values.map((value) => (
-					<div className='Pill' key={value.role.id}>
-						<p>{value.role.name}</p>
-						<Button
-							label='X'
-							onClick={(e: React.MouseEvent) => {
-								handleRemove(e, value.id);
-							}}
-						/>
-					</div>
-				))}
+			<div className='input-list'>
+				<Dropdown
+					name={name}
+					value={value}
+					isEditing={isEditing}
+					choices={choicesFiltered}
+					label={label}
+					onChange={handleChange}
+				/>
+				<Button label='Add' type='submit' className='input-field' />
+			</div>
+			<div className='list-wrapper'>
+				<div className='list '>
+					{values.map((value) => (
+						<div className='pill' key={value.role.id}>
+							<span>{value.role.name}</span>
+							<Button
+								label={<Close size={12} />}
+								onClick={(e: React.MouseEvent) => {
+									handleRemove(e, value.id);
+								}}
+							/>
+						</div>
+					))}
+				</div>
 			</div>
 		</form>
 	);

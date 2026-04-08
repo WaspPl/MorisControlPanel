@@ -1,3 +1,4 @@
+import { Close } from '../../assets/icons/pixelIcons';
 import Button from './Button';
 import Input from './Input';
 
@@ -40,21 +41,23 @@ function PromptList({
 	};
 	return (
 		<form className='input' onSubmit={handleSend}>
-			<Input
-				name={name}
-				type='text'
-				value={value}
-				isEditing={isEditing}
-				label={label}
-				onChange={handleChange}
-			/>
-			<Button label='Add' type='submit' />
-			<div>
+			<div className='input-list'>
+				<Input
+					name={name}
+					type='text'
+					value={value}
+					isEditing={isEditing}
+					label={label}
+					onChange={handleChange}
+				/>
+				<Button label='Add' type='submit' className='input-field' />
+			</div>
+			<div className='list'>
 				{values.map((value) => (
-					<div className='Pill' key={value.id}>
-						<p>{value.text}</p>
+					<div className='pill' key={value.id}>
+						<span>{value.text}</span>
 						<Button
-							label='X'
+							label={<Close size={12} />}
 							onClick={(e: React.MouseEvent) => {
 								handleRemove(e, value.id);
 							}}

@@ -5,12 +5,24 @@
 
 	--dataWindowWidth: 18rem;
 	--dataWindowColumnWidth: 10rem;
-
+	--maxListHeight: 7rem;
 	/* colors */
-	--blue: rgb(141, 181, 173);
-	--beige: rgb(255, 240, 225);
-	--beige-dark: rgb(243, 226, 209);
-	--orange: rgb(236, 175, 119);
+
+	--primary: rgb(255, 240, 225);
+	--primary-dark: rgb(243, 226, 209);
+	--primary-light: rgb(251, 247, 243);
+
+	--secondary: rgb(141, 181, 173);
+	--secondary-dark: rgb(109, 147, 140);
+	--secondary-light: rgb(183, 212, 207);
+
+	--accent: rgb(236, 175, 119);
+
+	--success: rgb(142, 216, 136);
+	--success-light: rgb(176, 232, 171);
+
+	--danger: rgb(223, 124, 124);
+	--danger-light: rgb(217, 144, 144);
 }
 
 *,
@@ -19,6 +31,7 @@
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+	scrollbar-color: var(--secondary) transparent;
 }
 body {
 	margin: 0px;
@@ -45,7 +58,6 @@ body {
 	z-index: 3;
 	position: sticky;
 	top: 0;
-	background-color: lightblue;
 	overflow: hidden;
 	display: flex;
 	justify-content: space-between;
@@ -65,7 +77,7 @@ body {
 }
 /* #region aside-elements */
 .aside-main {
-	background: blueviolet;
+	background: var(--accent);
 	z-index: 2;
 	width: var(--asideMainWidth);
 	height: 100%;
@@ -76,6 +88,7 @@ body {
 	flex-direction: column;
 	position: absolute;
 	left: 0;
+	border-right: 2px solid black;
 }
 .aside-desc {
 	z-index: 1;
@@ -92,6 +105,7 @@ body {
 	transform: translateX(-100%);
 	transition: transform 0.3s ease;
 	pointer-events: none;
+	border-right: 2px solid black;
 }
 
 .aside:has(.aside-button:hover) .aside-desc {
@@ -186,7 +200,7 @@ body {
 	display: flex;
 	justify-content: space-between;
 	padding: 2px;
-	background: var(--blue);
+	background: var(--secondary);
 	border-bottom: solid black 2px;
 }
 .buttons {
@@ -195,7 +209,7 @@ body {
 }
 .data-window-content {
 	padding: 10px;
-	background: var(--beige);
+	background: var(--primary);
 	height: 100%;
 	overflow-y: scroll;
 }
@@ -234,14 +248,12 @@ body {
 	flex-wrap: wrap;
 	justify-content: space-evenly;
 }
-.details-buttons {
-	min-width: 100%;
-}
 .details-column {
 	flex: 1 1 0px;
 	padding: 5px;
-	border-right: var(--beige-dark) 4px solid;
-	border-bottom: var(--beige-dark) 4px solid;
+	min-width: var(--dataWindowColumnWidth);
+	border-right: var(--primary-dark) 4px solid;
+	border-bottom: var(--primary-dark) 4px solid;
 }
 
 /* #endregion main-elements */
@@ -260,14 +272,87 @@ body {
 	padding: 0.25rem;
 	width: 100%;
 }
-button.input-field {
-	background: var(--beige-dark);
-	border-bottom: outset 5px var(--beige-dark);
+
+select.input-field:enabled,
+input.input-field:enabled {
+	background-color: var(--primary-light);
 }
-button.input-field:hover {
-	background: transparent;
+
+.list-column {
+	display: grid;
+	grid-template-rows: 1fr 1fr;
 }
+
+.list-wrapper {
+	border-radius: 10px;
+	overflow: hidden;
+	flex-grow: 1;
+}
+.list {
+	overflow-y: scroll;
+	height: var(--maxListHeight);
+	background: var(--primary-dark);
+	padding: 0.5rem;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0.25rem;
+}
+.input-list {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr auto;
+}
+.input-list > button {
+	height: fit-content;
+	align-self: center;
+}
+
+.pill {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	border: 1px solid black;
+	padding: 2px;
+	height: fit-content;
+}
+
+.details-buttons {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+button.primary {
+	background: var(--primary-dark);
+	border-bottom: outset 5px var(--primary-dark);
+}
+button.primary:hover {
+	background: var(--primary);
+}
+button.success {
+	background: var(--success);
+	border-bottom: outset 5px var(--success);
+}
+button.success:hover {
+	background: var(--success-light);
+}
+
+button.secondary {
+	background: var(--secondary);
+	border-bottom: outset 5px var(--secondary);
+}
+button.secondary:hover {
+	background: var(--secondary-light);
+}
+
+button.danger {
+	background: var(--danger);
+	border-bottom: outset 5px var(--danger);
+}
+button.danger:hover {
+	background: var(--danger-light);
+}
+
 /* #endregion ui */
+
 @media (max-width: 440px) {
 	.app {
 		grid-template-columns: 1fr;

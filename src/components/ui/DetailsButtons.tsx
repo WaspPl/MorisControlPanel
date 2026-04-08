@@ -22,15 +22,15 @@ function DetailsButtons({
 					<Button
 						type='submit'
 						label='Save'
-						variant='Success'
+						variant='success'
 						onClick={onSave}
 					/>
-					<Button label='Cancel' onClick={onCancel} variant='Danger' />
+					<Button label='Cancel' onClick={onCancel} variant='danger' />
 				</>
 			) : (
 				<>
-					<Button label='Edit' onClick={onEditClick} variant='Warning' />
-					<Button label='Delete' onClick={onDelete} variant='Danger' />
+					<Button label='Edit' onClick={onEditClick} variant='secondary' />
+					<Button label='Delete' onClick={onDelete} variant='danger' />
 				</>
 			)}
 		</div>
