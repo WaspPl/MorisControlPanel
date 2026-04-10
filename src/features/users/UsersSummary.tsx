@@ -25,7 +25,7 @@ function UsersSummary({ data }: Props) {
 				label='Username'
 			/>
 			<ForeignField
-				name='Role'
+				name={'Role' + data?.id}
 				item={data?.role}
 				foreignItemTable='Roles'
 				label='Role'

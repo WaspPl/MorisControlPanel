@@ -37,7 +37,7 @@ function CommandsSummary({ data }: Props) {
 				label='Description'
 			/>
 			<ForeignField
-				name='sprite'
+				name={'sprite' + data?.id}
 				item={data?.sprite}
 				foreignItemTable='Sprites'
 				label='Sprite'

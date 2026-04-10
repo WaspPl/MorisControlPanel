@@ -64,21 +64,23 @@ function RoleList({
 					onChange={handleChange}
 					title='Roles determine who can execute the command'
 				/>
-				<Button label='Add' type='submit' variant='success' />
+				{isEditing && <Button label='Add' type='submit' variant='success' />}
 			</div>
 			<div className='list-wrapper'>
 				<div className='list '>
 					{values.map((value) => (
 						<div className='pill' key={value.role.id}>
 							<span>{value.role.name}</span>
-							<Button
-								label={<Close size={12} />}
-								onClick={(e: React.MouseEvent) => {
-									handleRemove(e, value.id);
-								}}
-								variant='danger'
-								title='Remove role'
-							/>
+							{isEditing && (
+								<Button
+									label={<Close size={12} />}
+									onClick={(e: React.MouseEvent) => {
+										handleRemove(e, value.id);
+									}}
+									variant='danger'
+									title='Remove role'
+								/>
+							)}
 						</div>
 					))}
 				</div>

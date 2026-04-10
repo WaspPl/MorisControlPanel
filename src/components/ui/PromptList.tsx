@@ -51,20 +51,22 @@ function PromptList({
 					onChange={handleChange}
 					title='Prompts allow the command to be executed. Supports regex expressions'
 				/>
-				<Button label='Add' type='submit' variant='success' />
+				{isEditing && <Button label='Add' type='submit' variant='success' />}
 			</div>
 			<div className='list'>
 				{values.map((value) => (
 					<div className='pill' key={value.id}>
 						<span>{value.text}</span>
-						<Button
-							label={<Close size={12} />}
-							onClick={(e: React.MouseEvent) => {
-								handleRemove(e, value.id);
-							}}
-							variant='danger'
-							title='Remove prompt'
-						/>
+						{isEditing && (
+							<Button
+								label={<Close size={12} />}
+								onClick={(e: React.MouseEvent) => {
+									handleRemove(e, value.id);
+								}}
+								variant='danger'
+								title='Remove prompt'
+							/>
+						)}
 					</div>
 				))}
 			</div>

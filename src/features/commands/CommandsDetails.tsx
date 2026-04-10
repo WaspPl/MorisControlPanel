@@ -36,8 +36,14 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 	const [promptInput, setPromptInput] = useState('');
 	const [assignmentInput, setAssignmentInput] = useState(0);
 
-	const { getItems, createItem, deleteItemById, getScript, createScript } =
-		useTable();
+	const {
+		getItems,
+		createItem,
+		deleteItemById,
+		getScript,
+		createScript,
+		currentUser,
+	} = useTable();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -49,6 +55,8 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 
 		fetchData();
 	}, []);
+
+	const isAdmin = currentUser?.role_id == 1;
 
 	const addAssignment = async (roleId: number) => {
 		const dataToSend = {
@@ -213,7 +221,7 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 					label='Roles'
 					choices={roles}
 					values={assignments}
-					isEditing={true}
+					isEditing={isAdmin}
 					onChange={(value) => {
 						setAssignmentInput(value);
 					}}
@@ -223,7 +231,7 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 				<PromptList
 					name='prompts'
 					value={promptInput}
-					isEditing={true}
+					isEditing={isAdmin}
 					values={prompts}
 					label='Prompts'
 					onChange={(value) => {

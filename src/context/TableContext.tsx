@@ -120,7 +120,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		: null;
 	const setExpandedWindowId = (newId: number | null) =>
 		updateQueryParams({ expandedWindowId: newId?.toString() ?? null });
-	const API_BASE = 'http://192.168.55.119:8080';
+	const API_BASE = 'http://192.168.8.138:8080';
 	const api = axios.create({
 		baseURL: API_BASE,
 	});

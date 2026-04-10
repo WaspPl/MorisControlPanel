@@ -26,7 +26,6 @@ function Input({
 	let displayedValue = value;
 	if (type == 'datetime-local' && value) {
 		const date = new Date(value + ' UTC');
-		console.log(date);
 		displayedValue = date.toLocaleString('sv-SE');
 	}
 	const displayedPlaceholder = isEditing && placeholder ? placeholder : '';
