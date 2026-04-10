@@ -120,7 +120,18 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		: null;
 	const setExpandedWindowId = (newId: number | null) =>
 		updateQueryParams({ expandedWindowId: newId?.toString() ?? null });
-	const API_BASE = 'http://192.168.8.138:8080';
+
+	const API_BASE =
+		import.meta.env.VITE_APP_API_USE_SAME_BASE_URL === 'true'
+			? window.location.protocol +
+				'//' +
+				window.location.hostname +
+				':' +
+				import.meta.env.VITE_APP_API_PORT
+			: import.meta.env.VITE_APP_API_BASE_URL +
+				':' +
+				import.meta.env.VITE_APP_API_PORT;
+
 	const api = axios.create({
 		baseURL: API_BASE,
 	});
