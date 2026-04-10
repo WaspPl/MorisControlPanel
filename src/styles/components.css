@@ -213,7 +213,6 @@ p {
 	image-rendering: pixelated;
 	object-fit: cover;
 	object-position: 0%;
-	border: 1px black solid;
 }
 .spriteImage:hover {
 	object-position: 100%;

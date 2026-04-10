@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'cookies-js';
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
+import { v4 as uuidv4 } from 'uuid';
 
 export type TableType =
 	| 'Users'
@@ -80,7 +81,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 	const addNotification = (code: number, content: string) => {
 		setNotifications([
 			...notifications,
-			{ id: crypto.randomUUID(), status: code, content: content },
+			{ id: uuidv4(), status: code, content: content },
 		]);
 	};
 
@@ -119,7 +120,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		: null;
 	const setExpandedWindowId = (newId: number | null) =>
 		updateQueryParams({ expandedWindowId: newId?.toString() ?? null });
-	const API_BASE = 'http://localhost:8080';
+	const API_BASE = 'http://192.168.55.119:8080';
 	const api = axios.create({
 		baseURL: API_BASE,
 	});

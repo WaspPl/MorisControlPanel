@@ -9,6 +9,8 @@ type Props = {
 	type?: ButtonType;
 	className?: string;
 	id?: string;
+	title?: string;
+	form?: string;
 };
 
 function Button({
@@ -18,6 +20,8 @@ function Button({
 	type,
 	className,
 	id,
+	title,
+	form,
 }: Props) {
 	return (
 		<button
@@ -25,6 +29,8 @@ function Button({
 			onClick={onClick}
 			className={`input-field ${variant} ${className}`}
 			type={type}
+			title={title}
+			form={form}
 		>
 			{label}
 		</button>

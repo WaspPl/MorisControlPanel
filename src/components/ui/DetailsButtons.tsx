@@ -1,8 +1,8 @@
 import Button from './Button';
 
 type Props = {
+	submitButtonId: string;
 	isEditing: boolean;
-	onSave: (event: any) => Promise<void>;
 	onEditClick: () => void;
 	onDelete: () => Promise<void>;
 	onCancel: () => void;
@@ -10,21 +10,18 @@ type Props = {
 
 function DetailsButtons({
 	isEditing,
-	onSave,
 	onEditClick,
 	onDelete,
 	onCancel,
+	submitButtonId,
 }: Props) {
 	return (
 		<div className='details-buttons'>
 			{isEditing ? (
 				<>
-					<Button
-						type='submit'
-						label='Save'
-						variant='success'
-						onClick={onSave}
-					/>
+					<label htmlFor={submitButtonId} className='input-field success'>
+						Submit
+					</label>
 					<Button label='Cancel' onClick={onCancel} variant='danger' />
 				</>
 			) : (

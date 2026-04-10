@@ -27,23 +27,33 @@ function SpritesCreate({ data, onFieldChange, isEditing, onSave }: Props) {
 	}, []);
 
 	return (
-		<form onSubmit={onSave}>
-			<Input
-				name='name'
-				type='text'
-				value={data?.name}
-				onChange={onFieldChange}
-				isEditing={isEditing}
-				label='Name'
-			/>
-			<Image
-				name='content'
-				srcBase64={data?.content}
-				onChange={onFieldChange}
-				isEditing={isEditing}
-				label='Sprite'
-			/>
-			<button type='submit' style={{ display: 'none' }} />
+		<form id='details' onSubmit={onSave} className='details-form'>
+			<div className='details-column'>
+				<Input
+					name='name'
+					type='text'
+					value={data?.name}
+					onChange={onFieldChange}
+					isEditing={isEditing}
+					label='Name'
+					placeholder='eg. Spin'
+					title='A name for the sprite'
+					required
+				/>
+			</div>
+			<div className='details-column'>
+				<Image
+					name='content'
+					srcBase64={data?.content}
+					onChange={onFieldChange}
+					isEditing={isEditing}
+					label='Sprite'
+					title='The sprite sheet. Must be a png or a jpeg with a height of 8 and width divisible by 8'
+					required
+				/>
+			</div>
+			<div className='details-column'></div>
+			<input type='submit' id='submit-hidden' />
 		</form>
 	);
 }

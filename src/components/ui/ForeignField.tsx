@@ -6,9 +6,10 @@ type Props = {
 	item?: { id: number; name: string };
 	foreignItemTable: TableType;
 	label?: string;
+	title?: string;
 };
 
-function ForeignField({ name, item, foreignItemTable, label }: Props) {
+function ForeignField({ name, item, foreignItemTable, label, title }: Props) {
 	const { updateQueryParams } = useTable();
 
 	const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,6 +29,7 @@ function ForeignField({ name, item, foreignItemTable, label }: Props) {
 				onClick={handleClick}
 				className='input-field'
 				label={item ? item.name : 'Unassigned'}
+				title={title}
 			/>
 		</div>
 	);

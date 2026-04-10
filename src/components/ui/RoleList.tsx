@@ -62,8 +62,9 @@ function RoleList({
 					choices={choicesFiltered}
 					label={label}
 					onChange={handleChange}
+					title='Roles determine who can execute the command'
 				/>
-				<Button label='Add' type='submit' className='input-field' />
+				<Button label='Add' type='submit' variant='success' />
 			</div>
 			<div className='list-wrapper'>
 				<div className='list '>
@@ -75,6 +76,8 @@ function RoleList({
 								onClick={(e: React.MouseEvent) => {
 									handleRemove(e, value.id);
 								}}
+								variant='danger'
+								title='Remove role'
 							/>
 						</div>
 					))}

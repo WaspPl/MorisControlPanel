@@ -24,17 +24,23 @@ function RolesCreate({ data, onFieldChange, isEditing, onSave }: Props) {
 	}, []);
 
 	return (
-		<form onSubmit={onSave}>
-			<Input
-				name='name'
-				type='text'
-				value={data?.name}
-				onChange={onFieldChange}
-				isEditing={isEditing}
-				label='Name'
-				placeholder='A name for your role'
-			/>
-			<button type='submit' style={{ display: 'none' }} />
+		<form id='details' onSubmit={onSave} className='details-form'>
+			<div className='details-column'>
+				<Input
+					name='name'
+					type='text'
+					value={data?.name}
+					onChange={onFieldChange}
+					isEditing={isEditing}
+					label='Name'
+					placeholder='eg. Bot'
+					title='A name for the new role'
+					required
+				/>
+			</div>
+			<div className='details-column'></div>
+			<div className='details-column'></div>
+			<input type='submit' id='submit-hidden' />
 		</form>
 	);
 }

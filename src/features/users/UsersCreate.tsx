@@ -46,48 +46,66 @@ function UsersCreate({ data, onFieldChange, isEditing, onSave }: Props) {
 	}, []);
 
 	return (
-		<form onSubmit={onSave}>
-			<Input
-				name='username'
-				type='text'
-				value={data?.username}
-				onChange={onFieldChange}
-				isEditing={isEditing}
-				label='Username'
-			/>
-			<Input
-				name='password'
-				type='password'
-				value={data?.password}
-				onChange={onFieldChange}
-				isEditing={isEditing}
-				label='Password'
-			/>
-			<Dropdown
-				name='role_id'
-				value={data?.role_id}
-				onChange={onFieldChange}
-				isEditing={isEditing}
-				choices={roles}
-				label='Role'
-			/>
-			<Input
-				name='access_token_duration_minutes'
-				type='number'
-				value={data?.access_token_duration_minutes}
-				onChange={onFieldChange}
-				isEditing={isEditing}
-				label='Token Duration'
-			/>
-			<Input
-				name='llm_prefix'
-				type='text'
-				value={data?.llm_prefix}
-				onChange={onFieldChange}
-				isEditing={isEditing}
-				label='LLM Prefix'
-			/>
-			<button type='submit' style={{ display: 'none' }} />
+		<form id='details' onSubmit={onSave} className='details-form'>
+			<div className='details-column'>
+				<Input
+					name='username'
+					type='text'
+					value={data?.username}
+					onChange={onFieldChange}
+					isEditing={isEditing}
+					label='Username'
+					placeholder='eg. Moris'
+					title='Username and Login for the new user'
+					required
+				/>
+				<Input
+					name='password'
+					type='password'
+					value={data?.password}
+					onChange={onFieldChange}
+					isEditing={isEditing}
+					label='Password'
+					placeholder='eg. ********'
+					title='A password the new user can use to log in'
+					required
+				/>
+			</div>
+			<div className='details-column'>
+				<Dropdown
+					name='role_id'
+					value={data?.role_id}
+					onChange={onFieldChange}
+					isEditing={isEditing}
+					choices={roles}
+					label='Role'
+					title="A role for the new user. It'll define what the user can and can't do"
+					required
+				/>
+				<Input
+					name='access_token_duration_minutes'
+					type='number'
+					value={data?.access_token_duration_minutes}
+					onChange={onFieldChange}
+					isEditing={isEditing}
+					label='Token Duration Minutes'
+					placeholder='eg. 30'
+					title="How long this user's access token will be valid in minutes"
+					required
+				/>
+				<Input
+					name='llm_prefix'
+					type='text'
+					value={data?.llm_prefix}
+					onChange={onFieldChange}
+					isEditing={isEditing}
+					label='LLM Prefix'
+					placeholder='eg. Behive like a duck'
+					title="Text that will be sent before all this user's messages as a special 'system' message"
+				/>
+			</div>
+			<div className='details-column'></div>
+			<input type='submit' id='submit-hidden' />
 		</form>
 	);
 }

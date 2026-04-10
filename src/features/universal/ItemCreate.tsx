@@ -49,16 +49,18 @@ function ItemCreate({ table }: Props) {
 		return <div>Table type not found</div>;
 	}
 	return (
-		<div>
-			<ComponentToRender
-				data={draft}
-				onFieldChange={handleFieldChange}
-				isEditing={isEditing}
-				onSave={handleSave}
-			/>
+		<div className='details-feature create-feature'>
+			<div className='details-contents'>
+				<ComponentToRender
+					data={draft}
+					onFieldChange={handleFieldChange}
+					isEditing={isEditing}
+					onSave={handleSave}
+				/>
+			</div>
 			<DetailsButtons
+				submitButtonId='submit-hidden'
 				isEditing={isEditing}
-				onSave={handleSave}
 				onCancel={handleCancel}
 				onDelete={async () => {}}
 				onEditClick={() => {}}

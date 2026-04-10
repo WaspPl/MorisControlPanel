@@ -8,9 +8,20 @@ type Props = {
 	}[];
 	label?: string;
 	onChange?: (newValue: any, name: string) => void;
+	title?: string;
+	required?: boolean;
 };
 
-function Dropdown({ name, value, isEditing, choices, label, onChange }: Props) {
+function Dropdown({
+	name,
+	value,
+	isEditing,
+	choices,
+	label,
+	onChange,
+	title,
+	required,
+}: Props) {
 	return (
 		<div className='input'>
 			{label && <label htmlFor={name}>{label}</label>}
@@ -25,6 +36,8 @@ function Dropdown({ name, value, isEditing, choices, label, onChange }: Props) {
 					}
 				}}
 				disabled={!isEditing}
+				title={title}
+				required={required}
 			>
 				<option value={''}>--null--</option>
 				{choices?.map((choice) => (

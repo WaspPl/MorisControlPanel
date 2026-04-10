@@ -13,7 +13,7 @@ type Props = {
 function Notification({ id, status, content }: Props) {
 	useEffect(() => {
 		const close = async () => {
-			await sleep(10000);
+			await sleep(3000);
 			handleClose();
 		};
 		close();

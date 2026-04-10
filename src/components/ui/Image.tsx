@@ -7,9 +7,19 @@ type Props = {
 	onChange: (newValue: string, name: string) => void;
 	isEditing: boolean;
 	label?: string;
+	required?: boolean;
+	title?: string;
 };
 
-function Image({ name, srcBase64, onChange, isEditing, label }: Props) {
+function Image({
+	name,
+	srcBase64,
+	onChange,
+	isEditing,
+	label,
+	required,
+	title,
+}: Props) {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleClick = () => {
@@ -35,12 +45,13 @@ function Image({ name, srcBase64, onChange, isEditing, label }: Props) {
 			{label && <label htmlFor={name}>{label}</label>}
 			<div
 				id={name}
-				className='ImageField'
+				className='image-field'
 				onClick={handleClick}
 				style={{
 					cursor: isEditing ? 'pointer' : 'default',
 					maxWidth: '200px',
 				}}
+				title={title}
 			>
 				{srcBase64 ? (
 					<img
@@ -65,6 +76,7 @@ function Image({ name, srcBase64, onChange, isEditing, label }: Props) {
 					disabled={!isEditing}
 					accept='image/*'
 					onChange={handleFileChange}
+					required={required}
 				/>
 			</div>
 		</div>

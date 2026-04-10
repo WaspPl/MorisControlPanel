@@ -59,7 +59,8 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 		});
 	};
 
-	const handleSave = async () => {
+	const handleSave = async (event: React.SubmitEvent) => {
+		event.preventDefault();
 		const updatedItem = await updateItemById(table, itemId, draft);
 
 		if (updatedItem) {
@@ -95,7 +96,8 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 		setIsEditing(true);
 	};
 
-	const handleMeSave = async () => {
+	const handleMeSave = async (event: React.SubmitEvent) => {
+		event.preventDefault();
 		const updatedItem = await updateItemById(table, null, draft);
 		if (updatedItem) {
 			setAuthCookies(
@@ -126,14 +128,15 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 					data={draft}
 					onFieldChange={handleFieldChange}
 					isEditing={isEditing}
-					onSave={handleSave}
+					onSave={table == 'Me' ? handleMeSave : handleSave}
 				/>
 			</div>
 			{(table == 'Roles' && (itemId == 1 || itemId == 2)) ||
-			(currentUser?.role_id != 1 && table != 'Me') ? null : (
+			(currentUser?.role_id != 1 && table != 'Me') ||
+			(currentUser?.id == itemId && table == 'Users') ? null : (
 				<DetailsButtons
+					submitButtonId='submit-hidden'
 					isEditing={isEditing}
-					onSave={isMe ? handleMeSave : handleSave}
 					onCancel={handleCancel}
 					onDelete={isMe ? handleMeDelete : handleDelete}
 					onEditClick={handleEnableEdit}

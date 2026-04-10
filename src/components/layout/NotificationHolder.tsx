@@ -10,10 +10,10 @@ function NotificationHolder({}: Props) {
 		<div className='NotificationHolder'>
 			{notifications.map((n: any) => (
 				<Notification
+					key={n.id}
 					id={n.id}
 					status={n.status}
 					content={n.content}
-					key={n.id}
 				/>
 			))}
 		</div>

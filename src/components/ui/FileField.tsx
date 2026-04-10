@@ -7,9 +7,19 @@ type Props = {
 	onDownload: () => void;
 	isEditing: boolean;
 	label?: string;
+	title?: string;
+	required?: boolean;
 };
 
-function FileField({ name, onDownload, onUpload, isEditing, label }: Props) {
+function FileField({
+	name,
+	onDownload,
+	onUpload,
+	isEditing,
+	label,
+	title,
+	required,
+}: Props) {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 	const handleDownload = () => {
@@ -31,22 +41,28 @@ function FileField({ name, onDownload, onUpload, isEditing, label }: Props) {
 	};
 
 	return (
-		<div className='input'>
+		<div className='input input-file'>
 			<label htmlFor={name + 'div'}>{label}</label>
 			<div id={name + 'div'}>
 				{isEditing && (
-					<input
-						id={name}
-						className='FileDownloadButton'
-						type='file'
-						accept='.py'
-						onChange={handleChange}
-					/>
+					<label className='input-file-input input-field'>
+						{selectedFile?.name || 'No file selected'}
+						<input
+							id={name}
+							className='FileDownloadButton'
+							type='file'
+							accept='.py'
+							onChange={handleChange}
+							title={title}
+							required={required}
+						/>
+					</label>
 				)}
 				<Button
 					className='input-field'
 					label={isEditing ? 'Upload' : 'Download'}
 					onClick={isEditing ? handleUpload : handleDownload}
+					variant={selectedFile && isEditing ? 'success' : 'primary'}
 				/>
 			</div>
 		</div>
