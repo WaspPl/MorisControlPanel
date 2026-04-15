@@ -71,6 +71,8 @@ function ContentHolder() {
 		return () => observer.disconnect();
 	}, [loadMore, isMore, isLoading]);
 
+	if (!items) return null;
+
 	return (
 		<div className='main'>
 			<div className='main-list-border'>

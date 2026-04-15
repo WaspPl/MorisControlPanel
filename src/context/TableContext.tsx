@@ -189,11 +189,20 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		refresh_token: string,
 		refresh_token_duration_days: number,
 	) => {
+		const accessExpires = new Date(
+			new Date().getTime() + access_token_duration_minutes * 60 * 1000,
+		);
+
+		const refreshExpires = new Date(
+			new Date().getTime() + refresh_token_duration_days * 24 * 60 * 60 * 1000,
+		);
+
 		Cookies.set('token', access_token, {
-			expires: access_token_duration_minutes * 60,
+			expires: accessExpires,
 		});
+
 		Cookies.set('refresh_token', refresh_token, {
-			expires: refresh_token_duration_days * 24 * 60 * 60,
+			expires: refreshExpires,
 			secure: true,
 		});
 	};
