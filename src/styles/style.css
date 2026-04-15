@@ -79,7 +79,7 @@ body {
 	top: var(--navHeight);
 	height: calc(100vh - var(--navHeight));
 	width: var(--asideMainWidth);
-	z-index: 10;
+	z-index: 2;
 }
 /* #region aside-elements */
 .aside-main {
