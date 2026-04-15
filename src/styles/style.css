@@ -79,11 +79,12 @@ body {
 	top: var(--navHeight);
 	height: calc(100vh - var(--navHeight));
 	width: var(--asideMainWidth);
+	z-index: 10;
 }
 /* #region aside-elements */
 .aside-main {
 	background: var(--accent);
-	z-index: 2;
+	z-index: 5;
 	width: var(--asideMainWidth);
 	height: 100%;
 	display: flex;
@@ -96,7 +97,7 @@ body {
 	border-right: 2px solid black;
 }
 .aside-desc {
-	z-index: 1;
+	z-index: 4;
 	width: var(--asideDescWidth);
 	height: 100%;
 	background: burlywood;
@@ -123,7 +124,7 @@ body {
 	display: none;
 	aspect-ratio: 1/1;
 	height: 32px;
-	z-index: 3;
+	z-index: 6;
 }
 .aside-toggle button svg {
 	transition: transform 0.2s;
@@ -415,7 +416,7 @@ input.input-field:enabled {
 	width: 22px;
 	height: 22px;
 	left: 4px;
-	z-index: 2;
+	z-index: 1;
 	box-sizing: border-box;
 	transition: 0.2s ease-in;
 }
