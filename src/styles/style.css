@@ -24,6 +24,10 @@
 	--danger: rgb(223, 124, 124);
 	--danger-dark: rgb(213, 60, 60);
 	--danger-light: rgb(217, 144, 144);
+
+	--warning: rgb(249, 249, 115);
+	--warning-dark: rgb(193, 193, 89);
+	--warning-light: rgb(251, 251, 152);
 }
 
 *,
@@ -259,6 +263,18 @@ body {
 	border-bottom: var(--primary-dark) 4px solid;
 }
 
+.background-blur {
+	position: fixed;
+	height: 100vh;
+	width: 100vw;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 3;
+	background-color: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(2px);
+}
+
 /* #endregion main-elements */
 
 /* #region ui */
@@ -457,6 +473,110 @@ button.danger:hover {
 }
 
 /* #endregion ui */
+
+/* #region notifications*/
+.notification {
+	width: 250px;
+	min-height: 100px;
+	pointer-events: auto;
+	border: 2px black solid;
+	margin: 2px;
+}
+.notification-top-bar {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border-bottom: 2px solid black;
+	padding: 2px;
+}
+.notification.success {
+	background-color: var(--success-light);
+}
+.notification-top-bar.success {
+	background-color: var(--success);
+}
+.notification.warning {
+	background-color: var(--warning-light);
+}
+.notification-top-bar.warning {
+	background-color: var(--warning);
+}
+.notification.danger {
+	background-color: var(--danger-light);
+}
+.notification-top-bar.danger {
+	background-color: var(--danger);
+}
+/* #endregion notifications*/
+
+/* #region loading */
+.loader-wrapper {
+	z-index: 9999;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.loader {
+	position: absolute;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	translate: -50% -50%;
+	transform-origin: 50% 125%;
+	animation: mov-y 1s infinite linear;
+	z-index: 4;
+}
+.loader:before,
+.loader:after {
+	content: '';
+	flex: 1;
+	background: var(--accent);
+	transform-origin: 0% 100%;
+	animation: rtr-x 1s infinite linear;
+	z-index: 4;
+}
+.loader:before {
+	transform-origin: 100% 100%;
+	animation-name: rtr-rx;
+}
+
+@keyframes mov-y {
+	0%,
+	25% {
+		transform: translateY(0) scaleY(1);
+	}
+	49% {
+		transform: translateY(-75%) scaleY(1);
+	}
+	50% {
+		transform: translateY(-75%) scaleY(-1);
+	}
+	75%,
+	100% {
+		transform: translateY(-150%) scaleY(-1);
+	}
+}
+@keyframes rtr-x {
+	25%,
+	75% {
+		transform: rotate(0deg);
+	}
+	50% {
+		transform: rotate(90deg);
+	}
+}
+@keyframes rtr-rx {
+	25%,
+	75% {
+		transform: rotate(0deg);
+	}
+	50% {
+		transform: rotate(-90deg);
+	}
+}
+
+/* #endregion loading */
 
 @media (max-width: 440px) {
 	.aside {

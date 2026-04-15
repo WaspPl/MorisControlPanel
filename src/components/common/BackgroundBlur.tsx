@@ -13,7 +13,7 @@ function BackgroundBlur({ active, onClick }: Props) {
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
-					className='BackgroundBlur'
+					className='background-blur'
 					onClick={onClick}
 				/>
 			)}

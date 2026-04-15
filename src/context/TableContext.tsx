@@ -67,6 +67,7 @@ interface TableContextType {
 		refresh_token_duration_days: number,
 	) => void;
 	setIsLoading: (value: boolean) => void;
+	isProcessing: boolean;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
@@ -77,6 +78,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoading, setIsLoading] = useState(true);
 	const [notifications, setNotifications] = useState<any[]>([]);
+	const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
 	const addNotification = (code: number, content: string) => {
 		setNotifications([
@@ -197,6 +199,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 	};
 
 	const login = async (username: string, password: string) => {
+		setIsProcessing(true);
 		const formData = new URLSearchParams();
 		formData.append('username', username);
 		formData.append('password', password);
@@ -222,9 +225,11 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				error.response?.data.detail || 'Oops, server had an issue with that',
 			);
 		}
+		setIsProcessing(false);
 	};
 
 	const logout = async () => {
+		setIsProcessing(true);
 		const refreshToken = Cookies.get('refresh_token');
 
 		if (refreshToken) {
@@ -241,6 +246,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		Cookies.set('refresh_token', null);
 		setCurrentUser(null);
 		navigate('/login');
+		setIsProcessing(false);
 	};
 
 	const [items, setItems] = useState<any>([]);
@@ -257,6 +263,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		descending: boolean = true,
 		searchQuery: string = '',
 	) => {
+		setIsProcessing(true);
 		try {
 			const params = new URLSearchParams({
 				limit: limit.toString(),
@@ -269,30 +276,36 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				getAuthHeaders(),
 			);
 			setIsLoading(false);
+			setIsProcessing(false);
 			return response.data;
 		} catch (error: any) {
 			const status = error.response?.status;
 			if (status != 401) {
 				addNotification(status, error.response?.data.detail);
 			}
+			setIsProcessing(false);
 		}
 	};
 
 	const getItemDetailsById = async (table: TableType, id: number | null) => {
+		setIsProcessing(true);
 		try {
 			const path = id
 				? `${API_BASE}/${Routes[table]}/${id}`
 				: `${API_BASE}/${Routes[table]}`;
 			const response = await api.get(path, getAuthHeaders());
+			setIsProcessing(false);
 			return response.data;
 		} catch (error: any) {
 			const status = error.response?.status;
 
 			addNotification(status, error.response?.data.detail);
+			setIsProcessing(false);
 		}
 	};
 
 	const createItem = async (table: TableType, data: object) => {
+		setIsProcessing(true);
 		try {
 			const response = await api.post(
 				`${API_BASE}/${Routes[table]}`,
@@ -300,6 +313,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				getAuthHeaders(),
 			);
 			addNotification(response.status, 'Create successful!');
+			setIsProcessing(false);
 			return response.data;
 		} catch (error: any) {
 			const status = error.response?.status;
@@ -308,6 +322,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				status || 500,
 				error.response?.data.detail || 'Oops, server had an issue with that',
 			);
+			setIsProcessing(false);
 		}
 	};
 
@@ -316,33 +331,40 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		id: number | null,
 		data: object,
 	) => {
+		setIsProcessing(true);
 		try {
 			const path = id
 				? `${API_BASE}/${Routes[table]}/${id}`
 				: `${API_BASE}/${Routes[table]}`;
 			const response = await api.put(path, data, getAuthHeaders());
 			addNotification(response.status, 'Update successful');
+			setIsProcessing(false);
 			return response.data;
 		} catch (error: any) {
 			const status = error.response?.status;
 			addNotification(status, error.response?.data.detail);
+			setIsProcessing(false);
 		}
 	};
 
 	const deleteItemById = async (table: TableType, id: number | null) => {
+		setIsProcessing(true);
 		try {
 			const path = id
 				? `${API_BASE}/${Routes[table]}/${id}`
 				: `${API_BASE}/${Routes[table]}`;
 			const response = await api.delete(path, getAuthHeaders());
 			addNotification(response.status, 'Delete successful');
+			setIsProcessing(false);
 			return true;
 		} catch (error: any) {
 			const status = error.response?.status;
 			addNotification(status, error.response?.data.detail);
+			setIsProcessing(false);
 		}
 	};
 	const getScript = async (commandId: number) => {
+		setIsProcessing(true);
 		try {
 			const file = await api.get(
 				`${API_BASE}/${Routes['Commands']}/${commandId}/script`,
@@ -351,14 +373,17 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 					responseType: 'blob',
 				},
 			);
+			setIsProcessing(false);
 			return file.data;
 		} catch (error: any) {
 			const status = error.response?.status;
 
 			addNotification(status, error.response?.data.detail);
+			setIsProcessing(false);
 		}
 	};
 	const createScript = async (commandId: number, script: File) => {
+		setIsProcessing(true);
 		try {
 			const formData = new FormData();
 			formData.append('file', script);
@@ -367,10 +392,12 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 				formData,
 			);
 			addNotification(file.status, 'Upload succesful');
+			setIsProcessing(false);
 			return file;
 		} catch (error: any) {
 			const status = error.response?.status;
 			addNotification(status, error.response?.data.detail);
+			setIsProcessing(false);
 		}
 	};
 	const valuesToExport = {
@@ -399,6 +426,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 		removeNotification,
 		setAuthCookies,
 		setIsLoading,
+		isProcessing,
 	};
 	return (
 		<TableContext.Provider value={valuesToExport}>

@@ -23,17 +23,24 @@ function Notification({ id, status, content }: Props) {
 	const handleClose = () => {
 		removeNotification(id);
 	};
+
+	const statusGroup = status.toString()[0];
+	const variant =
+		statusGroup == '5' || statusGroup == '4'
+			? 'danger'
+			: statusGroup == '2'
+				? 'success'
+				: 'warning';
+
 	return (
 		<motion.div
 			layout
 			transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-			className={`Notification`}
+			className={`notification ${variant}`}
 		>
-			<div className='DataWindowTopBar'>
+			<div className={`notification-top-bar ${variant}`}>
 				{status}
-				<div className='ButtonContainer'>
-					<TopBarButton icon={Close} onClick={handleClose} />
-				</div>
+				<TopBarButton icon={Close} onClick={handleClose} />
 			</div>
 			{content}
 		</motion.div>
