@@ -203,7 +203,6 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
 
 		Cookies.set('refresh_token', refresh_token, {
 			expires: refreshExpires,
-			secure: true,
 		});
 	};
 

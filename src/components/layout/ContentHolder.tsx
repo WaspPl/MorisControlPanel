@@ -49,7 +49,7 @@ function ContentHolder() {
 		setItems([...items, ...received]);
 
 		setIsLoading(false);
-	}, [activeTable, items.length, isMore, isLoading, getItems, setItems]);
+	}, [activeTable, items?.length, isMore, isLoading, getItems, setItems]);
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
