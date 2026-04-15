@@ -26,6 +26,6 @@ jobs:
           script: |
             cd /home/wasppl/moris3/ControlPanel
             git pull origin main
-            npm ci
+            npm install
             npm run build
             sudo systemctl restart morisControlPanel
