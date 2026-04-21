@@ -2,6 +2,8 @@
 ### About
 This repository contains a frontend application designed to work with [**MorisAPI**](https://github.com/WaspPl/MorisAPI), an API for a DIY smart home assistant. It allows management of various  tables in an intuitive and fun way. </br> 
 It requires the aforementioned API as well as NodeJS to work.
+</br>
+The design is fuly responsive and works on both computers and mobile devices. It features an auto login system so that the user doesnt have to log in every time they open the application.
 ### Quick Start
 #### 1. Clone & Install
 ```bash
