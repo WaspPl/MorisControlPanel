@@ -194,12 +194,14 @@ p {
 	flex-direction: row;
 	justify-content: center;
 	margin-right: 10px;
+	
 }
 .Logo > img {
 	object-fit: scale-down;
 	border: solid black 1px;
 	aspect-ratio: 1/1;
 	height: 100%;
+		background-color: white;
 }
 
 .ImageField {

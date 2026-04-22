@@ -6,6 +6,7 @@ type Props = {
 	content: ComponentType<SVGProps<SVGSVGElement>>;
 	onClick: (name: string) => Promise<void>;
 	onHover: (name: string, description: string) => void;
+	active?: boolean;
 };
 
 function SidebarButton({
@@ -14,6 +15,7 @@ function SidebarButton({
 	content: Icon,
 	onClick,
 	onHover,
+	active
 }: Props) {
 	const handleClick = async (): Promise<void> => {
 		await onClick(name);
@@ -27,7 +29,7 @@ function SidebarButton({
 		<button
 			onClick={handleClick}
 			onMouseOver={handleHover}
-			className='aside-button'
+			className={`aside-button ${active ? 'active' : ''}`}
 		>
 			<Icon width={48} height={48} />
 		</button>

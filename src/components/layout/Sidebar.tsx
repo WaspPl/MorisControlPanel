@@ -12,7 +12,7 @@ import SidebarButton from '../ui/SidebarButton';
 import TopBarButton from '../ui/TopBarButton';
 
 function Sidebar() {
-	const { setActiveTable } = useTable();
+	const { setActiveTable, activeTable } = useTable();
 
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -48,6 +48,7 @@ function Sidebar() {
 						description='View and edit users. Users are used to communicate with the system and to log into the control panel'
 						onClick={handleButtonClick}
 						onHover={handleButtonHover}
+						active={activeTable === 'Users'}
 					/>
 					<SidebarButton
 						content={FactorySharp}
@@ -55,6 +56,7 @@ function Sidebar() {
 						description='Roles desc'
 						onClick={handleButtonClick}
 						onHover={handleButtonHover}
+						active={activeTable === 'Roles'}
 					/>
 					<SidebarButton
 						content={Script}
@@ -62,6 +64,7 @@ function Sidebar() {
 						description='Commands desc'
 						onClick={handleButtonClick}
 						onHover={handleButtonHover}
+						active={activeTable === 'Commands'}
 					/>
 					<SidebarButton
 						content={ImagesSharp}
@@ -69,6 +72,7 @@ function Sidebar() {
 						description='Sprites desc'
 						onClick={handleButtonClick}
 						onHover={handleButtonHover}
+						active={activeTable === 'Sprites'}
 					/>
 				</div>
 				<div className='aside-desc'>

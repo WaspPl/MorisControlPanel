@@ -15,8 +15,11 @@
 	--secondary: rgb(141, 181, 173);
 	--secondary-dark: rgb(109, 147, 140);
 	--secondary-light: rgb(183, 212, 207);
+	--secondary-lighter: rgb(219, 240, 231);
 
-	--accent: rgb(239, 160, 85);
+	--accent: rgb(233, 183, 163);
+	--accent-dark: rgb(218, 111, 85);
+	--accent-light: rgb(236, 205, 177);
 
 	--success: rgb(142, 216, 136);
 	--success-light: rgb(176, 232, 171);
@@ -67,6 +70,7 @@ body {
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 2px black solid;
+	background-color: var(--accent);
 }
 
 /* #region nav-elements */
@@ -83,7 +87,7 @@ body {
 }
 /* #region aside-elements */
 .aside-main {
-	background: var(--accent);
+	background: var(--secondary);
 	z-index: 5;
 	width: var(--asideMainWidth);
 	height: 100%;
@@ -100,7 +104,7 @@ body {
 	z-index: 4;
 	width: var(--asideDescWidth);
 	height: 100%;
-	background: burlywood;
+	background: var(--accent-light);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -151,14 +155,20 @@ body {
 	transition:
 		transform 0.2s,
 		box-shadow 0.2s;
+	background-color: var(--primary-dark);
 }
 .aside-button:hover {
 	transform: translateY(-8px);
-	box-shadow: white 0px 8px;
+	box-shadow: var(--primary-dark) 0px 8px;
+	background-color: var(--accent-light);
 }
 .aside-button:active {
 	transform: translateY(-2px);
-	box-shadow: white 0px 2px;
+	box-shadow: var(--primary-dark) 0px 2px;
+	background-color: var(--accent);
+}
+.aside-button.active {
+	background-color: var(--accent);
 }
 
 /* #endregion aside-elements */
@@ -166,6 +176,7 @@ body {
 	grid-area: main;
 	padding: 2%;
 	height: calc(100vh - var(--navHeight));
+	background-color: var(--primary);
 }
 /* #region main-elements */
 .main-list-border {
@@ -179,8 +190,8 @@ body {
 	padding: 30px;
 	overflow-y: scroll;
 	height: 100%;
-	scrollbar-color: var(--orange) trasparent;
-	background: rgb(181, 255, 239);
+	scrollbar-color: var(--accent) trasparent;
+	background: var(--secondary-lighter);
 }
 .main-list-grid {
 	display: grid;
