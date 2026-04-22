@@ -4,6 +4,10 @@ This repository contains a frontend application designed to work with [**MorisAP
 It requires the aforementioned API as well as NodeJS to work.
 </br>
 The design is fuly responsive and works on both computers and mobile devices. It features an auto login system so that the user doesnt have to log in every time they open the application.
+### Screenshots
+| Desktop Version | Mobile Version |
+|--|--|
+| <img src="https://github.com/WaspPl/MorisControlPanel/blob/main/readmeImages/WebsiteScreenshot.png?raw=true" width="100%"> | <img src="https://github.com/WaspPl/MorisControlPanel/blob/main/readmeImages/WebsiteMobileScreenshot.png?raw=true" width="100%"> |
 ### Quick Start
 #### 1. Clone & Install
 ```bash
