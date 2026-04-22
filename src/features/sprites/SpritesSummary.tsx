@@ -13,11 +13,11 @@ function SpritesSummary({ data }: Props) {
 	return (
 		<form>
 			<Input
-				name='Username'
+				name='Name'
 				type='text'
 				value={data?.name}
 				isEditing={false}
-				label='Username'
+				label='Name'
 			/>
 			<Input
 				name='time_updated'
