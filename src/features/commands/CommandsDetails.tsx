@@ -115,10 +115,7 @@ function CommandsDetails({ data, onFieldChange, isEditing, onSave }: Props) {
 		}
 	};
 	const handleScriptUpload = async (script: File) => {
-		const success = await createScript(data.id, script);
-		if (success) {
-			alert('Upload successful!');
-		}
+		await createScript(data.id, script);
 	};
 	return (
 		<>

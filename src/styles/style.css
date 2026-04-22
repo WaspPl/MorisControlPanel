@@ -17,8 +17,7 @@
 	--secondary-light: rgb(183, 212, 207);
 	--secondary-lighter: rgb(219, 240, 231);
 
-	--accent: rgb(233, 183, 163);
-	--accent-dark: rgb(218, 111, 85);
+	--accent: rgb(238, 164, 135);
 	--accent-light: rgb(236, 205, 177);
 
 	--success: rgb(142, 216, 136);
@@ -157,6 +156,9 @@ body {
 		box-shadow 0.2s;
 	background-color: var(--primary-dark);
 }
+.aside-button.active {
+	background-color: var(--secondary-light);
+}
 .aside-button:hover {
 	transform: translateY(-8px);
 	box-shadow: var(--primary-dark) 0px 8px;
@@ -165,10 +167,6 @@ body {
 .aside-button:active {
 	transform: translateY(-2px);
 	box-shadow: var(--primary-dark) 0px 2px;
-	background-color: var(--accent);
-}
-.aside-button.active {
-	background-color: var(--accent);
 }
 
 /* #endregion aside-elements */

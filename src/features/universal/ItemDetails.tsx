@@ -81,6 +81,8 @@ function ItemDetails({ table, itemId, isMe = false }: Props) {
 	};
 
 	const handleDelete = async () => {
+		const comnfirmDelete = window.confirm('Are you sure you want to delete this item?');
+		if (!comnfirmDelete) return;
 		const deletedItem = await deleteItemById(table, itemId);
 		if (deletedItem) {
 			setItems(items.filter((item) => item.id != itemId));
